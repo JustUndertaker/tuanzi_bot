@@ -26,6 +26,6 @@ def _img_from_rosysun() -> MessageSegment:
         img_url = r.text
         message = MessageSegment.image(img_url)
     else:
-        logger.error('coser插件访问网络异常: {code}')
-        message = MessageSegment.text(f'网络异常')
+        logger.error(f'coser插件访问网络异常: {code}')
+        message = MessageSegment.text('网络异常')
     return message
