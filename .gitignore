@@ -145,3 +145,4 @@ workspace.code-workspace
 Dockerfile
 docker-compose.yml
 pyproject.toml
+.vscode/
