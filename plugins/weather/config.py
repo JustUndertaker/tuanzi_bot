@@ -215,5 +215,5 @@ WIND_INFO = [
 
 # 其他图标
 OTHER_INFO = {
-    "temperature":"icon/temperature.png"
+    "temperature": "icon/temperature.png"
 }
