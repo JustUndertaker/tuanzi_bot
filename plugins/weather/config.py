@@ -10,171 +10,171 @@ WEATHER_INFO = [
     {
         "name": "晴",
         "icon": "icon/Sunny.png",
-        "background": ""
+        "background": "background/sunny.png"
     }, {
         "name": "多云",
         "icon": "icon/Cloudy.png",
-        "background": ""
+        "background": "background/cloudy.png"
     }, {
         "name": "阴",
         "icon": "icon/Overcast.png",
-        "background": ""
+        "background": "background/overcast.png"
     }, {
         "name": "阵雨",
         "icon": "icon/Shower.png",
-        "background": ""
+        "background": "background/rain.png"
     }, {
         "name": "雷阵雨",
         "icon": "icon/Thundershower.png",
-        "background": ""
+        "background": "background/thunder.png"
     }, {
         "name": "雷阵雨伴有冰雹",
         "icon": "icon/Thundershower.png",
-        "background": ""
+        "background": "background/thunder.png"
     }, {
         "name": "雨夹雪",
         "icon": "icon/Sleet.png",
-        "background": ""
+        "background": "background/rain.png"
     }, {
         "name": "小雨",
         "icon": "icon/Shower.png",
-        "background": ""
+        "background": "background/rain.png"
     }, {
         "name": "中雨",
         "icon": "icon/Moderate_rain.png",
-        "background": ""
+        "background": "background/rain.png"
     }, {
         "name": "大雨",
         "icon": "icon/Heavy_rain.png",
-        "background": ""
+        "background": "background/rain.png"
     }, {
         "name": "暴雨",
         "icon": "icon/Storm.png",
-        "background": ""
+        "background": "background/rain.png"
     }, {
         "name": "大暴雨",
         "icon": "icon/Heavy_storm.png",
-        "background": ""
+        "background": "background/rain.png"
     }, {
         "name": "特大暴雨",
         "icon": "icon/Severe_storm.png",
-        "background": ""
+        "background": "background/rain.png"
     }, {
         "name": "阵雪",
         "icon": "icon/Light_snow.png",
-        "background": ""
+        "background": "background/snow.png"
     }, {
         "name": "小雪",
         "icon": "icon/Light_snow.png",
-        "background": ""
+        "background": "background/snow.png"
     }, {
         "name": "中雪",
         "icon": "icon/Moderate_snow.png",
-        "background": ""
+        "background": "background/snow.png"
     }, {
         "name": "大雪",
         "icon": "icon/Heavy_snow.png",
-        "background": ""
+        "background": "background/snow.png"
     }, {
         "name": "暴雪",
         "icon": "icon/Snowstorm.png",
-        "background": ""
+        "background": "background/snow.png"
     }, {
         "name": "雾",
         "icon": "icon/Foggy.png",
-        "background": ""
+        "background": "background/foggy.png"
     }, {
         "name": "冻雨",
         "icon": "icon/Sleet.png",
-        "background": ""
+        "background": "background/rain.png"
     }, {
         "name": "沙尘暴",
         "icon": "icon/Duststorm.png",
-        "background": ""
+        "background": "background/duststorm.png"
     }, {
         "name": "小到中雨",
         "icon": "icon/Moderate_rain.png",
-        "background": ""
+        "background": "background/rain.png"
     }, {
         "name": "中到大雨",
         "icon": "icon/Heavy_rain.png",
-        "background": ""
+        "background": "background/rain.png"
     }, {
         "name": "大到暴雨",
         "icon": "icon/Storm.png",
-        "background": ""
+        "background": "background/rain.png"
     }, {
         "name": "暴雨到大暴雨",
         "icon": "icon/Heavy_storm.png",
-        "background": ""
+        "background": "background/rain.png"
     }, {
         "name": "大暴雨到特大暴雨",
         "icon": "icon/Severe_storm.png",
-        "background": ""
+        "background": "background/rain.png"
     }, {
         "name": "小到中雪",
         "icon": "icon/Moderate_snow.png",
-        "background": ""
+        "background": "background/snow.png"
     }, {
         "name": "中到大雪",
         "icon": "icon/Heavy_snow.png",
-        "background": ""
+        "background": "background/snow.png"
     }, {
         "name": "大到暴雪",
         "icon": "icon/Snowstorm.png",
-        "background": ""
+        "background": "background/snow.png"
     }, {
         "name": "浮尘",
         "icon": "icon/Dust.png",
-        "background": ""
+        "background": "background/haze.png"
     }, {
         "name": "扬沙",
         "icon": "icon/Sand.png",
-        "background": ""
+        "background": "background/duststorm.png"
     }, {
         "name": "强沙尘暴",
         "icon": "icon/Duststorm.png",
-        "background": ""
+        "background": "background/duststorm.png"
     }, {
         "name": "霾",
         "icon": "icon/Haze.png",
-        "background": ""
+        "background": "background/haze.png"
     }, {
         "name": "浓雾",
         "icon": "icon/Foggy.png",
-        "background": ""
+        "background": "background/foggy.png"
     }, {
         "name": "强浓雾",
         "icon": "icon/Foggy.png",
-        "background": ""
+        "background": "background/foggy.png"
     }, {
         "name": "中度霾",
         "icon": "icon/Moderate_haze.png",
-        "background": ""
+        "background": "background/haze.png"
     }, {
         "name": "重度霾",
         "icon": "icon/Severe_haze.png",
-        "background": ""
+        "background": "background/haze.png"
     }, {
         "name": "严重霾",
         "icon": "icon/Severe_haze.png",
-        "background": ""
+        "background": "background/haze.png"
     }, {
         "name": "大雾",
         "icon": "icon/Foggy.png",
-        "background": ""
+        "background": "background/foggy.png"
     }, {
         "name": "特强浓雾",
         "icon": "icon/Foggy.png",
-        "background": ""
+        "background": "background/foggy.png"
     }, {
         "name": "雨",
         "icon": "icon/Shower.png",
-        "background": ""
+        "background": "background/rain.png"
     }, {
         "name": "雪",
         "icon": "icon/Light_snow.png",
-        "background": ""
+        "background": "background/snow.png"
     }
 ]
 

@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 
 from nonebot.adapters.cqhttp.message import MessageSegment
 from configs.pathConfig import PATH_PLUGIN_WEATHER, PATH_FONT
-from .config import WEATHER_INFO, WIND_INFO, OTHER_INFO
+from .config import WEATHER_INFO, WIND_INFO
 
 
 async def get_weather_of_city(city) -> MessageSegment:
@@ -20,7 +20,7 @@ async def get_weather_of_city(city) -> MessageSegment:
     try:
         data_json = httpx.get(url).json()
         if data_json['desc'] != "OK":
-            msg = MessageSegment.text("查询失败！")
+            msg = MessageSegment.text("查询失败了，你看看参数对不对！")
             return msg
 
         # 消息处理模块
@@ -28,7 +28,7 @@ async def get_weather_of_city(city) -> MessageSegment:
         msg = MessageSegment.image(img)
         return msg
     except:
-        msg = MessageSegment.text("查询失败！")
+        msg = MessageSegment.text("查询失败了，难道是网络有问题！")
         return msg
 
 
@@ -149,7 +149,7 @@ def _draw_card_of_weather(data) -> str:
         # 获取天气图标和背景
         if weather_type == wearther['name']:
             type_icon = wearther['icon']
-            # background=wearther['background']
+            background = wearther['background']
             break
 
     wind_icon = WIND_INFO[0]['icon']
