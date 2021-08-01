@@ -237,8 +237,9 @@ def _draw_card_of_weather(data) -> str:
     img.save(output_buffer, format='PNG')
     byte_data = output_buffer.getvalue()
     base64_str = base64.b64encode(byte_data)
+    req_str = 'base64://'+base64_str.decode()
 
-    return base64_str.decode()
+    return req_str
 
 
 if __name__ == '__main__':
