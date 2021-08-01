@@ -11,3 +11,6 @@ PATH_PLUGIN_WEATHER = './resources/img/weather/'
 
 # 日志位置
 LOG_PATH = './log/'
+
+# 数据库位置
+DATABASE_PATH = './database/'
