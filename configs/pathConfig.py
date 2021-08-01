@@ -8,3 +8,6 @@ PATH_FONT = './resources/font/msyh.ttc'
 
 # 天气插件的合成图片位置
 PATH_PLUGIN_WEATHER = './resources/img/weather/'
+
+# 日志位置
+LOG_PATH = './log/'

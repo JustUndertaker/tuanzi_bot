@@ -1,6 +1,7 @@
 from nonebot.adapters.cqhttp import Bot, Event
 from nonebot import on_command
 from nonebot.typing import T_State
+from utils.log import logger
 from .data_source import get_weather_of_city
 
 
@@ -15,4 +16,6 @@ async def _(bot: Bot, event: Event, state: T_State):
     args = str(event.get_message()).strip()
     city = args
     msg = await get_weather_of_city(city)
+    logger.info(f'(USER {event.user_id}, GROUP {event.group_id if event.message_type != "private" else "private"} ) '
+                f'查询天气:' + city)
     await weather.finish(msg)
