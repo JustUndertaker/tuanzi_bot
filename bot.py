@@ -22,7 +22,7 @@ driver.register_adapter("cqhttp", CQHTTPBot)
 
 nonebot.load_plugins("plugins")
 nonebot.load_plugin("nonebot_plugin_test")
-#nonebot.load_from_toml("pyproject.toml")
+nonebot.load_plugins("plugins")
 
 # Modify some config / config depends on loaded configs
 #
