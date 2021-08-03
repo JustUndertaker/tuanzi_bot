@@ -1,5 +1,6 @@
 import httpx
 import regex
+from httpx import RequestError, HTTPStatusError
 from nonebot import on_regex
 from nonebot.log import logger
 from nonebot.adapters.cqhttp import MessageSegment
@@ -24,12 +25,14 @@ async def _(bot: Bot, event: Event, state: T_State):
 
 
 def _img_from_rosysun() -> MessageSegment:
-    r = httpx.get(_rosysun_url)
-    code = r.status_code
-    if code == 200:
-        img_url = r.text
-        message = MessageSegment.image(img_url)
-    else:
-        logger.error(f'coser插件访问网络异常: {code}')
+    try:
+        url = httpx.get(_rosysun_url).text
+        message = MessageSegment.image(url)
+        logger.info(f'coser插件发送: {message}')
+    except (RequestError, HTTPStatusError) as httpExc:
+        logger.error(f'coser插件访问网络异常: {httpExc}')
         message = MessageSegment.text('网络异常')
+    except Exception as e:
+        logger.error(f'coser插件异常: {e}')
+        message = MessageSegment.text('其余异常')
     return message
