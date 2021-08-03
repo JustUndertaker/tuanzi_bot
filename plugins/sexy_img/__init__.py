@@ -34,8 +34,8 @@ async def _(bot: Bot, event: Event, state: T_State):
             (title, author, url) = await api()
             text = MessageSegment.text(f'标题: {title}\n画师: {author}\n地址: {url}\n')
             img = MessageSegment.image(url)
-            logger.info(f'sexy插件发送: {text + img}')
             message = text + img
+            logger.info(f'sexy插件发送: {message}')
         except (RequestError, HTTPStatusError) as httpExc:
             logger.error(f'sexy插件访问网络异常: {httpExc}')
             message = MessageSegment.text('网络异常')
