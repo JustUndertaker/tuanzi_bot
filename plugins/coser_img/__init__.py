@@ -2,6 +2,7 @@ import httpx
 import regex
 from httpx import RequestError, HTTPStatusError
 from nonebot import on_regex
+from nonebot.exception import ActionFailed
 from nonebot.log import logger
 from nonebot.adapters.cqhttp import MessageSegment
 from nonebot.typing import T_State
@@ -21,7 +22,11 @@ async def _(bot: Bot, event: Event, state: T_State):
     matcher = regex.match(_reg_pattern, text)
     if matcher is not None:
         message = _img_from_rosysun()
-        await coser.finish(message)
+        try:
+            # 由于图片可能无法访问，因此需要捕捉ActionFailed异常
+            await coser.finish(message)
+        except ActionFailed:
+            await coser.finish('信息发送失败')
 
 
 def _img_from_rosysun() -> MessageSegment:
