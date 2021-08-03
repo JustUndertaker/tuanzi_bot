@@ -12,7 +12,7 @@ from nonebot.adapters import Bot, Event
 from plugins.sexy_img.lolicon import fetch_lolicon_random_img
 
 
-_reg_pattern = r'^[色|涩]+图$'
+_reg_pattern = r'^[色|涩]图$'
 sexy_img = on_regex(_reg_pattern, priority=5, block=True)
 
 
@@ -34,6 +34,7 @@ async def _(bot: Bot, event: Event, state: T_State):
             (title, author, url) = await api()
             text = MessageSegment.text(f'标题: {title}\n画师: {author}\n地址: {url}\n')
             img = MessageSegment.image(url)
+            logger.info(f'sexy插件发送: {text + img}')
             message = text + img
         except (RequestError, HTTPStatusError) as httpExc:
             logger.error(f'sexy插件访问网络异常: {httpExc}')
