@@ -1,7 +1,7 @@
 import random
 
 import httpx
-from nonebot import logger
+from utils.log import logger
 
 
 """
@@ -37,10 +37,6 @@ async def fetch_lolicon_random_img():
         raise Exception(f'返回数据为空')
     # 随机获取一张图片对象
     random_idx = random.randint(0, data_len - 1)
-    logger.info(f'图片列表: {data}\n随机位置: {random_idx}')
+    logger.info(f'随机位置: {random_idx}\n图片列表: {data}')
     item = data[random_idx]
-    return {
-        "title": item['title'],
-        "author": item["author"],
-        "url": item["urls"]["original"]
-    }
+    return item['title'], item["author"], item["urls"]["original"]
