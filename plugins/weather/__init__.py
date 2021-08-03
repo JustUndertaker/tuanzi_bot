@@ -31,11 +31,16 @@ async def _(bot: Bot, event: Event, state: T_State):
     await weather.finish(msg)
 
 
-def _get_city(message_str) -> str:
+def _get_city(message_str: str) -> str:
     '''
-    匹配消息中的城市名称
-    :message_str：原始消息
-    :return 天气city
+    :说明
+        匹配消息中的城市名称
+
+    :参数
+        * message_str：原始消息
+
+    :返回
+        * str：天气city
     '''
 
     # 匹配前面
