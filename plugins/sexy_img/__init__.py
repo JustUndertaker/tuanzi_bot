@@ -4,6 +4,8 @@ import random
 import regex
 from httpx import RequestError, HTTPStatusError
 from nonebot import on_regex
+from nonebot.exception import ActionFailed
+
 from utils.log import logger
 from nonebot.adapters.cqhttp import MessageSegment
 from nonebot.typing import T_State
@@ -45,7 +47,11 @@ async def _(bot: Bot, event: Event, state: T_State):
         except Exception as e:
             logger.error(f'sexy插件异常: {e}')
             message = MessageSegment.text('其余异常')
-        await sexy_img.finish(message)
+        try:
+            # 由于图片可能无法访问，因此需要捕捉ActionFailed异常
+            await sexy_img.finish(message)
+        except ActionFailed:
+            await sexy_img.finish('信息发送失败')
 
 
 # 返回随机获取图片的随机一个api
