@@ -9,7 +9,7 @@ from nonebot.adapters.cqhttp import MessageSegment
 from nonebot.typing import T_State
 from nonebot.adapters import Bot, Event
 
-from plugins.sexy_img.lolicon import fetch_lolicon_random_img
+from .lolicon import fetch_lolicon_random_img
 
 
 _reg_pattern = r'^[色|涩]图$'
