@@ -2,9 +2,8 @@ from nonebot.adapters.cqhttp import Bot, Event, MessageSegment
 from nonebot import on_regex
 from nonebot.typing import T_State
 
-from modules.user_info import User
+from modules.user_info import User_info
 from utils.log import logger
-
 
 __plugin_name__ = '签到系统'
 __plugin_usage__ = "普普通通的签到系统，每天0点重置\n命令：签到"
@@ -14,8 +13,9 @@ sign = on_regex(r"^签到$", priority=5, block=True)
 
 @sign.handle()
 async def _(bot: Bot, event: Event, state: T_State):
-    user = User
+    user = User_info
     await sign.finish('签到成功')
+
 
 # TODO:签到
 '''
