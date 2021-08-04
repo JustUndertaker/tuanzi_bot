@@ -23,30 +23,35 @@ async def get_chat_reply(text: str) -> MessageSegment:
     :异常
         * Exception
     '''
-    try:
-        # 先调用腾讯接口
-        req = _get_chat_from_tencent(text)
-        msg = MessageSegment.text(req)
-        log = f'闲聊-腾讯API返回：{req}'
-        logger.info(log)
-        return msg
-    except Exception as e:
-        error = f'闲聊-腾讯接口调用失败：{e}，改为青云客API。'
-        logger.error(error)
+
+    if SECRET_ID != '' and SECRET_KEY != '':
         try:
-            req = _get_chat_from_qingyunke(text)
+            # 先调用腾讯接口
+            req = _get_chat_from_tencent(text)
             msg = MessageSegment.text(req)
-            log = f'闲聊-青云客API返回：{req}'
+            log = f'闲聊-腾讯API返回：{req}'
             logger.info(log)
             return msg
-        except NetworkError:
-            error = '闲聊-青云客接口调用失败：网络问题'
+
+        except:
+            error = f'闲聊-腾讯接口调用失败了，改用青云客接口。'
             logger.error(error)
-            raise NetworkError
-        except Exception:
-            error = '闲聊-青云客接口调用失败：其他问题'
-            logger.error(error)
-            raise Exception
+
+    # 调用青云客API
+    try:
+        req = _get_chat_from_qingyunke(text)
+        msg = MessageSegment.text(req)
+        log = f'闲聊-青云客API返回：{req}'
+        logger.info(log)
+        return msg
+    except NetworkError:
+        error = '闲聊-青云客接口调用失败：网络问题'
+        logger.error(error)
+        raise NetworkError
+    except Exception:
+        error = '闲聊-青云客接口调用失败：其他问题'
+        logger.error(error)
+        raise Exception
 
 
 def _get_chat_from_tencent(text: str) -> str:
@@ -84,8 +89,7 @@ def _get_chat_from_tencent(text: str) -> str:
     try:
         req = httpx.post(url, data=data, headers=headers).json()['Response']
         if 'Error' in req:
-            code = req['Error']['Code']
-            raise Exception(code)
+            raise Exception
         else:
             reply = req['Reply']
             return reply
