@@ -14,3 +14,9 @@ LOG_PATH = './log/'
 
 # 数据库位置
 DATABASE_PATH = './database/'
+
+# 疫情json文件数据
+YIQING_DATA_PATH = './data/'
+
+# 疫情图片文件数据
+YIQING_IMG_PATH = './resources/img/yiqing/'
