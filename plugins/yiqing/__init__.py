@@ -1,6 +1,7 @@
-from nonebot import on_regex, on_command
-from nonebot.adapters.cqhttp import Bot, Event, MessageSegment
+from nonebot import on_regex
+from nonebot.adapters.cqhttp import Bot, MessageSegment, GroupMessageEvent
 from nonebot.typing import T_State
+from nonebot.adapters.cqhttp.permission import GROUP
 import re
 
 from .data_source import get_yiqing_card
@@ -11,11 +12,11 @@ __plugin_name__ = '疫情查询'
 __plugin_usage__ = '查询疫情帮助:\n\t对我说 疫情 省份/城市，我会回复疫情的实时数据\n\t示例: 疫情 温州'
 
 
-yiqing = on_regex(r"([\u4e00-\u9fa5]+[疫情]$)|(^疫情 [\u4e00-\u9fa5]+$)",  priority=5, block=True)
+yiqing = on_regex(r"([\u4e00-\u9fa5]+[疫情]$)|(^疫情 [\u4e00-\u9fa5]+$)", permission=GROUP,  priority=5, block=True)
 
 
 @yiqing.handle()
-async def _(bot: Bot, event: Event, state: T_State):
+async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     message_str = event.get_plaintext()
     name = _get_name(message_str)
 
@@ -32,6 +33,8 @@ async def _(bot: Bot, event: Event, state: T_State):
 
     if province:
         msg = await get_yiqing_card(province, city)
+        log = f'{event.sender.card}（{event.user_id}，{event.group_id}） - 查询疫情：{name}'
+        logger.info(log)
     else:
         msg = MessageSegment.text('参数不对，不对！')
 

@@ -22,7 +22,7 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     # 获得聊天内容
     text = event.get_plaintext()
     flag = True
-    log = f'（{event.user_id}，{event.group_id}）开启闲聊：{text}'
+    log = f'{event.sender.card}（{event.user_id}，{event.group_id}） - 开启闲聊：{text}'
     logger.info(log)
     try:
         msg = await get_chat_reply(text)

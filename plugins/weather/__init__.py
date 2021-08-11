@@ -1,5 +1,6 @@
-from nonebot.adapters.cqhttp import Bot, Event, MessageSegment
+from nonebot.adapters.cqhttp import Bot, GroupMessageEvent, MessageSegment
 from nonebot import on_regex
+from nonebot.adapters.cqhttp.permission import GROUP
 import re
 from nonebot.typing import T_State
 from utils.log import logger
@@ -9,11 +10,11 @@ from .data_source import get_weather_of_city
 __plugin_name__ = '天气查询'
 __plugin_usage__ = "普普通通的查天气吧\n示例：北京天气\n天气 北京"
 
-weather = on_regex(r"([\u4e00-\u9fa5]+[天气]$)|(^天气 [\u4e00-\u9fa5]+$)", priority=5, block=True)
+weather = on_regex(r"([\u4e00-\u9fa5]+[天气]$)|(^天气 [\u4e00-\u9fa5]+$)", permission=GROUP, priority=5, block=True)
 
 
 @weather.handle()
-async def _(bot: Bot, event: Event, state: T_State):
+async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     message_str = event.get_plaintext()
     city = _get_city(message_str)
 
@@ -26,8 +27,8 @@ async def _(bot: Bot, event: Event, state: T_State):
     else:
         msg = await get_weather_of_city(city)
 
-    logger.info(f'(USER {event.user_id}, GROUP {event.group_id if event.message_type != "private" else "private"} ) '
-                f'查询天气:' + city)
+    log = f'{event.sender.card}（{event.user_id}，{event.group_id}） - 查询天气：{city}'
+    logger.info(log)
     await weather.finish(msg)
 
 
