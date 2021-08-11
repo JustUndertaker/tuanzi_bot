@@ -3,7 +3,7 @@
 
 import nonebot
 from nonebot.adapters.cqhttp import Bot as CQHTTPBot
-from utils.database import DB
+from utils.database import init
 
 nonebot.init()
 app = nonebot.get_asgi()
@@ -12,7 +12,7 @@ driver = nonebot.get_driver()
 driver.register_adapter("cqhttp", CQHTTPBot)
 
 # 注册数据库
-driver.on_startup(DB.init)
+driver.on_startup(init)
 
 # 加载插件
 nonebot.load_plugins("plugins")
