@@ -1,6 +1,7 @@
 import httpx
 from io import BytesIO
 import base64
+from datetime import datetime
 from PIL import Image, ImageDraw, ImageFont
 
 from nonebot.adapters.cqhttp.message import MessageSegment
@@ -112,6 +113,13 @@ async def _draw_card(data: dict) -> str:
     loc = (86, 72)
     color = (79, 126, 237, 255)
     drawBoard.text(xy=loc, text=name, fill=color, font=font)
+
+    # 日期
+    today = datetime.today().strftime('%Y-%m-%d')
+    font = ImageFont.truetype(PATH_FONT, size=20)
+    loc = (320, 87)
+    color = (79, 126, 237, 255)
+    drawBoard.text(xy=loc, text=today, fill=color, font=font)
 
     # 现存确诊
     font = ImageFont.truetype(PATH_FONT, size=18)
