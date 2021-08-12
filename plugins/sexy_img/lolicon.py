@@ -4,7 +4,7 @@ import httpx
 from nonebot import logger
 
 
-"""
+'''
 api返回格式为
 字段名	数据类型	说明
 pid	int	作品 pid
@@ -19,12 +19,14 @@ tags	string[]	作品标签，包含标签的中文翻译（有的话）
 ext	string	图片扩展名
 uploadDate	number	作品上传日期；时间戳，单位为毫秒
 urls	object	包含了所有指定size的图片地址
-"""
+'''
 _url = "https://api.lolicon.app/setu/v2"
 
 
-# 从lolicon接口获取一张随机色图，并按照规范输出
 async def fetch_lolicon_random_img():
+    """
+    从lolicon接口获取一张随机色图，并按照规范输出
+    """
     j = httpx.get(_url).json()
     error = j['error']
     logger.info(f'请求结果: {j}')

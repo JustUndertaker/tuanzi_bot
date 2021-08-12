@@ -15,12 +15,13 @@ async def _(bot: Bot, event: GroupMessageEvent):
     # 当用户未传入任何关键字，则直接调用url请求随机图片
     if len(msg) == 0:
         try:
-            # 注意返回的规范格式为
-            # {
-            #   "title": "",
-            #   "author": "",
-            #   "url": ""
-            # }
+            '''
+            {
+              "title": "",
+              "author": "",
+              "url": ""
+            }
+            '''
             (title, author, url) = await fetch_lolicon_random_img()
             text = MessageSegment.text(f'标题: {title}\n画师: {author}\n地址: {url}\n')
             img = MessageSegment.image(url)
