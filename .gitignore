@@ -147,3 +147,4 @@ docker-compose.yml
 pyproject.toml
 .vscode/
 *.db
+.idea/
