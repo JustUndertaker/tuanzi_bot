@@ -56,7 +56,6 @@ async def _get_yiqing_data(province: str, city: str = None) -> dict:
             "province": province,
             "city": city
         }
-    headers = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0"}
 
     async with httpx.AsyncClient(headers=get_user_agent()) as client:
         resp = await client.get(url, params=params)
