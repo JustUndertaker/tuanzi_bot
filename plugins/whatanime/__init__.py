@@ -27,9 +27,6 @@ async def _(bot: Bot, event: MessageEvent, state: T_State):
 
 @whatanime.got('img_url', prompt='图呢?')
 async def _(bot: Bot, event: MessageEvent, state: T_State):
-    url = state.get('img_url', '')
-    if len(url) <= 0:
-        return
     await whatanime.send('正在识别...')
     try:
         j = httpx.get(_api, params={'url': url}).json()
