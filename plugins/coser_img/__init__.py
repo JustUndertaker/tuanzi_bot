@@ -3,7 +3,7 @@ import regex
 from httpx import RequestError, HTTPStatusError
 from nonebot import on_regex
 from nonebot.exception import ActionFailed
-from nonebot.log import logger
+from utils.log import logger
 from nonebot.adapters.cqhttp import MessageSegment
 from nonebot.typing import T_State
 from nonebot.adapters import Bot, Event
