@@ -17,3 +17,6 @@ DATABASE_PATH = './database/data.db'
 
 # 疫情背景图片
 YIQING_IMG_PATH = './resources/img/yiqing/backgroud.png'
+
+# 签到背景图片
+SIGN_IN_IMG_PATH = './/resources/img/sign_in/backgroud.png'
