@@ -15,8 +15,6 @@ from .lolicon import fetch_lolicon_random_img
 
 
 _plugin_name = '色图'
-
-
 _reg_pattern = r'^[色|涩]图$'
 sexy_img = on_regex(_reg_pattern, priority=5, block=True)
 

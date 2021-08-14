@@ -10,11 +10,8 @@ from nonebot.adapters import Bot, Event
 
 
 _plugin_name = 'coser'
-
-
 _reg_pattern = r'^[cC][oO][sS](er)?$'
 coser = on_regex(_reg_pattern, priority=5, block=True)
-
 _rosysun_url = 'http://api.rosysun.cn/cos'
 
 

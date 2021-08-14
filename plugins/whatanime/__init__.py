@@ -8,9 +8,7 @@ from httpx import HTTPStatusError, RequestError
 from nonebot.typing import T_State
 
 _plugin_name = '识番'
-
 _api = 'https://api.trace.moe/search'
-
 whatanime = on_command("识番", priority=5, block=True)
 
 
