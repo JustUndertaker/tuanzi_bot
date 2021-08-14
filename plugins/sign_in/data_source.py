@@ -33,6 +33,22 @@ async def reset() -> list:
     return group_list
 
 
+async def update_info(group_id: int, member_list: list) -> MessageSegment:
+    '''
+    :说明
+        * 更新群信息
+    '''
+    for one in member_list:
+        user_id = one['user_id']
+        user_name = one['card']
+        if user_name == '':
+            user_name = one['nickname']
+        await User_Info.append_or_update(user_id, group_id, user_name)
+    await Group_Info.append_or_update(group_id)
+    msg = MessageSegment.text('更新完毕。')
+    return msg
+
+
 async def get_sign_in(user_id: int, group_id: int, user_name: str) -> MessageSegment:
     '''
     :说明
