@@ -1,4 +1,7 @@
 '''
 全局配置文件
 '''
-print("test")
+
+# 腾讯聊天API
+SECRET_ID = ''
+SECRET_KEY = ''

@@ -3,31 +3,20 @@
 
 import nonebot
 from nonebot.adapters.cqhttp import Bot as CQHTTPBot
+from utils.database import init
 
-# Custom your logger
-#
-# from nonebot.log import logger, default_format
-# logger.add("error.log",
-#            rotation="00:00",
-#            diagnose=False,
-#            level="ERROR",
-#            format=default_format)
-
-# You can pass some keyword args config to init function
 nonebot.init()
 app = nonebot.get_asgi()
 
 driver = nonebot.get_driver()
 driver.register_adapter("cqhttp", CQHTTPBot)
 
+# 注册数据库
+driver.on_startup(init)
+
+# 加载插件
 nonebot.load_plugins("plugins")
 # nonebot.load_plugin("nonebot_plugin_test")
-# nonebot.load_from_toml("pyproject.toml")
-
-# Modify some config / config depends on loaded configs
-#
-# config = driver.config
-# do something...
 
 
 if __name__ == "__main__":

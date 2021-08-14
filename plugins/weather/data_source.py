@@ -10,11 +10,16 @@ from configs.pathConfig import PATH_PLUGIN_WEATHER, PATH_FONT
 from .config import WEATHER_INFO, WIND_INFO
 
 
-async def get_weather_of_city(city) -> MessageSegment:
+async def get_weather_of_city(city: str) -> MessageSegment:
     '''
-    通过城市名称获取天气结果
-    :city：城市名
-    :返回：message消息内容
+    :说明
+        通过城市名称获取天气结果
+
+    :参数
+        * city：城市名
+
+    :返回
+        * message消息内容
     '''
     url = 'http://wthrcdn.etouch.cn/weather_mini?city=' + city
     try:
@@ -32,11 +37,16 @@ async def get_weather_of_city(city) -> MessageSegment:
         return msg
 
 
-def _get_temperature(data) -> str:
+def _get_temperature(data: str) -> str:
     '''
-    处理温度字符串
-    :data：高温 38°C
-    :返回：38°↑
+    :说明
+        处理温度字符串
+
+    :参数
+        * data：高温 38°C
+
+    :返回
+        * str：38°↑
     '''
     level = data[0:2]
     temperature = re.search(r"\d+?\d*", data).group()
@@ -47,21 +57,31 @@ def _get_temperature(data) -> str:
     return temperature
 
 
-def _get_fengli(data) -> str:
+def _get_fengli(data: str) -> str:
     '''
-    通过fengli字符串获取风力等级
-    :data：<![CDATA[2级]]>
-    :返回：2级
+    :说明
+        通过fengli字符串获取风力等级
+
+    :参数
+        * data：<![CDATA[2级]]>
+
+    :返回
+        * str：2级
     '''
     return data[9:-3]
 
 
-def _get_date_info(date_str) -> str:
+def _get_date_info(date_str: str) -> str:
     '''
-    通过字典给定的date，获取具体星期几
-    :date_str：29日星期四
-    :返回：昨天，今天，星期一...星期天
-    :第二返回：日期
+    :说明
+        通过字典给定的date，获取具体星期几
+
+    :参数
+        * date_str：29日星期四
+
+    :返回
+        * str：昨天，今天，星期一...星期天
+        * str：日期
     '''
     week_day = date_str[-3:]
     date_day = int(re.search(r"\d+?\d*", date_str).group())
@@ -86,11 +106,16 @@ def _get_date_info(date_str) -> str:
     return week_day, req_date
 
 
-def _create_little_card(data) -> Image:
+def _create_little_card(data: dict) -> Image:
     '''
-    创建日期小卡片
-    :data 一天的数据,date,type
-    :返回：Image类
+    :说明
+        创建日期小卡片
+
+    :参数
+        * data 一天的数据,包含date,type的key
+
+    :返回
+        * Image类
     '''
     week, date = _get_date_info(data['date'])
     weather_type = data['type']
@@ -128,9 +153,16 @@ def _create_little_card(data) -> Image:
     return img
 
 
-def _draw_card_of_weather(data) -> str:
+def _draw_card_of_weather(data: dict) -> str:
     '''
-    根据返回的data画出天气卡片
+    :说明
+        根据返回的data画出天气卡片
+
+    :参数
+        * data：dict，一天的数据
+
+    :返回
+        * 图片文件base64解码后的值，base64://XXXXX
     '''
     # 获取值
     yesterday = data['yesterday']
