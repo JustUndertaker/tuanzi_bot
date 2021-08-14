@@ -21,6 +21,17 @@ class Group_Info(Model):
         database = DB
 
     @classmethod
+    async def get_group_list(cls) -> list:
+        '''
+        返回群列表
+        '''
+        record = cls.select()
+        group_list = []
+        for one in record:
+            group_list.append(one.group_id)
+        return group_list
+
+    @classmethod
     async def get_sign_nums(cls, group_id: int) -> int:
         '''
         :说明
