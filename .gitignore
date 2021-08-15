@@ -148,3 +148,4 @@ pyproject.toml
 .vscode/
 *.db
 .idea/
+.env.dev
