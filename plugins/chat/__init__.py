@@ -21,14 +21,17 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     '''
     # 获得聊天内容
     text = event.get_plaintext()
+    name = event.sender.card
+    if name == '':
+        name = event.sender.nickname
     flag = True
-    log = f'{event.sender.card}（{event.user_id}，{event.group_id}） - 开启闲聊：{text}'
+    log = f'{name}（{event.user_id}，{event.group_id}）：{text}'
     logger.info(log)
     try:
         msg = await get_chat_reply(text)
     except:
-        log = f'闲聊失败了……'
-        logger.info(log)
+        f'{name}（{event.user_id}，{event.group_id}）：闲聊失败。'
+        logger.error(log)
         flag = False
 
     if flag:
