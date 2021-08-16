@@ -36,7 +36,7 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
         name = event.sender.card
         if name == '':
             name = event.sender.nickname
-        log = f'{name}（{event.user_id}，{event.group_id}） - 查询疫情：{name}'
+        log = f'{name}（{event.user_id}，{event.group_id}） - 查询疫情：{city}'
         logger.info(log)
     else:
         msg = MessageSegment.text('参数不对，不对！')
