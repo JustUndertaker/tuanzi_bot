@@ -27,7 +27,10 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     else:
         msg = await get_weather_of_city(city)
 
-    log = f'{event.sender.card}（{event.user_id}，{event.group_id}） - 查询天气：{city}'
+    name = event.sender.card
+    if name == "":
+        name = event.sender.nickname
+    log = f'{name}（{event.user_id}，{event.group_id}） - 查询天气：{city}'
     logger.info(log)
     await weather.finish(msg)
 

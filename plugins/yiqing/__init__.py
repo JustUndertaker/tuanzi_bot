@@ -33,7 +33,10 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
 
     if province:
         msg = await get_yiqing_card(province, city)
-        log = f'{event.sender.card}（{event.user_id}，{event.group_id}） - 查询疫情：{name}'
+        name = event.sender.card
+        if name == '':
+            name = event.sender.nickname
+        log = f'{name}（{event.user_id}，{event.group_id}） - 查询疫情：{name}'
         logger.info(log)
     else:
         msg = MessageSegment.text('参数不对，不对！')

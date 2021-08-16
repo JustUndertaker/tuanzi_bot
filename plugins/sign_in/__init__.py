@@ -34,6 +34,8 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     group_id = event.group_id
     member_list = await bot.get_group_member_list(group_id=group_id)
     msg = await update_info(group_id, member_list)
+    log = f'（{event.group_id}）管理员更新信息'
+    logger.info(log)
     await update.finish(msg)
 
 
@@ -41,8 +43,8 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
 @scheduler.scheduled_job("cron", hour=0, minute=0)
 async def _():
     group_list = await reset()
+    bot = get_bot()
     for group_id in group_list:
-        bot = get_bot()
         try:
             await bot.send_group_msg(group_id=group_id, message='又是元气满满的一天呢~')
         except:
