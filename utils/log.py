@@ -1,30 +1,33 @@
-import logging
-from datetime import datetime
+import loguru
 from configs.pathConfig import LOG_PATH
-# CRITICAL    50
-# ERROR      40
-# WARNING   30
-# INFO        20
-# DEBUG      10
-# NOTSET     0
 
-# _handler = logging.StreamHandler(sys.stdout)
-# _handler.setFormatter(
-#     logging.Formatter('[%(asctime)s %(name)s] %(levelname)s: %(message)s')
-# )
-logger = logging.getLogger('tuanzi')
-logger.setLevel(level=logging.DEBUG)
+logger = loguru.logger
 
-#formatter = logging.Formatter('[%(asctime)s] - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
-formatter = logging.Formatter('[%(asctime)s] - %(levelname)s: %(message)s')
+custom_format = "{time:MM-DD HH:MM:SS} [{name}] [{level}] | {message}"
 
-file_handler = logging.FileHandler(LOG_PATH + str(datetime.now().date()) + '.log', mode='a', encoding='utf-8')
-file_handler.setLevel(level=logging.INFO)
-file_handler.setFormatter(formatter)
+logger.add(
+    LOG_PATH+"debug/{time:YYYY-MM-DD}.log",
+    rotation="00:00",
+    retention="10 days",
+    level="DEBUG",
+    format=custom_format,
+    encoding="utf-8"
+)
 
-stream_handler = logging.StreamHandler()
-stream_handler.setLevel(logging.INFO)
-stream_handler.setFormatter(formatter)
+logger.add(
+    LOG_PATH+"info/{time:YYYY-MM-DD}.log",
+    rotation="00:00",
+    retention="10 days",
+    level="INFO",
+    format=custom_format,
+    encoding="utf-8"
+)
 
-logger.addHandler(file_handler)
-logger.addHandler(stream_handler)
+logger.add(
+    LOG_PATH+"error/{time:YYYY-MM-DD}.log",
+    rotation="00:00",
+    retention="10 days",
+    level="ERROR",
+    format=custom_format,
+    encoding="utf-8"
+)
