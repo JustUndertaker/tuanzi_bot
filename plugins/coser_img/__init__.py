@@ -8,8 +8,12 @@ from nonebot.adapters.cqhttp import MessageSegment
 from nonebot.typing import T_State
 from nonebot.adapters import Bot, Event
 
+from nonebot.plugin import export
 
-_plugin_name = 'coser'
+export = export()
+export.plugin_name = 'COS小姐姐'
+export.plugin_usage = '获得好看的小姐姐\n命令：cos/coser'
+
 _reg_pattern = r'^[cC][oO][sS](er)?$'
 coser = on_regex(_reg_pattern, priority=5, block=True)
 _rosysun_url = 'http://api.rosysun.cn/cos'

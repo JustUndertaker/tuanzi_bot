@@ -1,4 +1,4 @@
-from nonebot.adapters.cqhttp import Bot, GroupMessageEvent, MessageSegment
+from nonebot.adapters.cqhttp import Bot, GroupMessageEvent
 from nonebot.adapters.cqhttp.permission import GROUP
 from nonebot import on_regex
 from nonebot.permission import SUPERUSER
@@ -7,9 +7,11 @@ from utils.utils import scheduler, get_bot
 
 from .data_source import get_sign_in, reset, update_info
 from utils.log import logger
+from nonebot.plugin import export
 
-__plugin_name__ = '签到系统'
-__plugin_usage__ = "普普通通的签到系统，每天0点重置\n命令：签到"
+export = export()
+export.plugin_name = '签到系统'
+export.plugin_usage = '普普通通的签到系统，每天0点重置\n命令：签到'
 
 sign = on_regex(r"^签到$", permission=GROUP, priority=5, block=True)
 

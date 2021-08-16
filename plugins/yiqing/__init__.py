@@ -8,8 +8,11 @@ from .data_source import get_yiqing_card
 from utils.log import logger
 from .config import city_list
 
-__plugin_name__ = '疫情查询'
-__plugin_usage__ = '查询疫情帮助:\n\t对我说 疫情 省份/城市，我会回复疫情的实时数据\n\t示例: 疫情 温州'
+from nonebot.plugin import export
+
+export = export()
+export.plugin_name = '疫情查询'
+export.plugin_usage = '查询疫情帮助:\n命令 省份/城市疫情\n命令 疫情 省份/城市'
 
 
 yiqing = on_regex(r"([\u4e00-\u9fa5]+[疫情]$)|(^疫情 [\u4e00-\u9fa5]+$)", permission=GROUP,  priority=5, block=True)

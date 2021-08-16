@@ -7,9 +7,11 @@ from nonebot.typing import T_State
 from utils.log import logger
 from .data_source import get_chat_reply
 
+from nonebot.plugin import export
 
-__plugin_name__ = '智能闲聊'
-__plugin_usage__ = "普普通通的闲聊\n命令：@robot闲聊内容"
+export = export()
+export.plugin_name = '智能闲聊'
+export.plugin_usage = '普普通通的闲聊\n命令：@robot闲聊内容'
 
 chat = on_message(rule=to_me(), permission=GROUP, priority=8, block=True)
 

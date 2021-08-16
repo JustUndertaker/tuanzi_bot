@@ -13,8 +13,13 @@ from nonebot.adapters import Bot, Event
 
 from .lolicon import fetch_lolicon_random_img
 
+from nonebot.plugin import export
 
-_plugin_name = '色图'
+export = export()
+export.plugin_name = '色图'
+export.plugin_usage = '获得lolicon的涩图\n命令：色图/涩图'
+
+
 _reg_pattern = r'^[色|涩]图$'
 sexy_img = on_regex(_reg_pattern, priority=5, block=True)
 

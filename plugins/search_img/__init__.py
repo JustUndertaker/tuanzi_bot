@@ -8,12 +8,17 @@ from utils.log import logger
 
 from .pixiv import pixiv_search
 
+from nonebot.plugin import export
+
+export = export()
+export.plugin_name = '识图'
+export.plugin_usage = '用于P站识图功能\n命令：p站识图/P站识图'
+
 
 class Option(Enum):
     pixiv = 1
 
 
-_plugin_name = '识图'
 search_img = on_command('P站识图', aliases={'p站识图'}, priority=5, block=True)
 """
     api接口返回必须为MessageSegment数组

@@ -7,6 +7,13 @@ from nonebot.log import logger
 from httpx import HTTPStatusError, RequestError
 from nonebot.typing import T_State
 
+from nonebot.plugin import export
+
+export = export()
+export.plugin_name = '识番'
+export.plugin_usage = '通过whatanime的api以图识番:\n命令 识番'
+
+
 _plugin_name = '识番'
 _api = 'https://api.trace.moe/search'
 whatanime = on_command("识番", priority=5, block=True)
