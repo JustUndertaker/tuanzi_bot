@@ -14,7 +14,6 @@ export.plugin_name = '识番'
 export.plugin_usage = '通过whatanime的api以图识番:\n命令 识番'
 
 
-_plugin_name = '识番'
 _api = 'https://api.trace.moe/search'
 whatanime = on_command("识番", priority=5, block=True)
 
@@ -49,13 +48,13 @@ async def _(bot: Bot, event: MessageEvent, state: T_State):
             for item in sorted_result[:3]:
                 await whatanime.send(_parse_to_message(item))
     except (RequestError, HTTPStatusError) as httpExc:
-        logger.error(f'{_plugin_name}插件访问网络异常: {httpExc}')
+        logger.error(f'识番插件访问网络异常: {httpExc}')
         await whatanime.send('网络异常')
     except json.JSONDecodeError as jsonExc:
-        logger.error(f'{_plugin_name}插件接口返回数据结构异常: {jsonExc}')
+        logger.error(f'识番插件接口返回数据结构异常: {jsonExc}')
         await whatanime.send('返回异常')
     except Exception as e:
-        logger.error(f'{_plugin_name}插件异常: {e}')
+        logger.error(f'识番插件异常: {e}')
         await whatanime.send('其余异常')
     finally:
         await whatanime.finish('识别完毕')

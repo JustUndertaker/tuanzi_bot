@@ -10,7 +10,7 @@ from .data_source import get_chat_reply
 from nonebot.plugin import export
 
 export = export()
-export.plugin_name = '智能闲聊'
+export.plugin_name = '闲聊'
 export.plugin_usage = '普普通通的闲聊\n命令：@robot闲聊内容'
 
 chat = on_message(rule=to_me(), permission=GROUP, priority=8, block=True)

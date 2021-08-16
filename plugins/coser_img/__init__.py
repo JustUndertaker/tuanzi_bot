@@ -11,7 +11,7 @@ from nonebot.adapters import Bot, Event
 from nonebot.plugin import export
 
 export = export()
-export.plugin_name = 'COS小姐姐'
+export.plugin_name = 'COS'
 export.plugin_usage = '获得好看的小姐姐\n命令：cos/coser'
 
 _reg_pattern = r'^[cC][oO][sS](er)?$'
@@ -37,11 +37,11 @@ def _img_from_rosysun() -> MessageSegment:
     try:
         url = httpx.get(_rosysun_url).text
         message = MessageSegment.image(url)
-        logger.info(f'{_plugin_name}插件发送: {message}')
+        logger.info(f'COS插件发送: {message}')
     except (RequestError, HTTPStatusError) as httpExc:
-        logger.error(f'{_plugin_name}插件访问网络异常: {httpExc}')
+        logger.error(f'COS插件访问网络异常: {httpExc}')
         message = MessageSegment.text('网络异常')
     except Exception as e:
-        logger.error(f'{_plugin_name}插件异常: {e}')
+        logger.error(f'COS插件异常: {e}')
         message = MessageSegment.text('其余异常')
     return message

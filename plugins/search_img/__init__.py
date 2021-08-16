@@ -47,10 +47,10 @@ async def _(bot: Bot, event: MessageEvent, state: T_State):
         for message in messages:
             await search_img.send(message)
     except (RequestError, HTTPStatusError) as httpExc:
-        logger.error(f'{_plugin_name}插件访问网络异常: {httpExc}')
+        logger.error(f'识图插件访问网络异常: {httpExc}')
         await search_img.send('网络异常')
     except Exception as e:
-        logger.error(f'{_plugin_name}插件异常: {e}')
+        logger.error(f'识图插件异常: {e}')
         await search_img.send('其余异常')
     finally:
         await search_img.finish('识别完毕')
