@@ -11,7 +11,7 @@ from .config import city_list
 from nonebot.plugin import export
 
 export = export()
-export.plugin_name = '疫情查询'
+export.plugin_name = '疫情'
 export.plugin_usage = '查询疫情帮助:\n命令 省份/城市疫情\n命令 疫情 省份/城市'
 
 

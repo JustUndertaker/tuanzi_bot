@@ -10,7 +10,7 @@ from utils.log import logger
 from nonebot.plugin import export
 
 export = export()
-export.plugin_name = '签到系统'
+export.plugin_name = '签到'
 export.plugin_usage = '普普通通的签到系统，每天0点重置\n命令：签到'
 
 sign = on_regex(r"^签到$", permission=GROUP, priority=5, block=True)
@@ -27,7 +27,7 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     msg = await get_sign_in(user_id, group_id, user_name)
     await sign.finish(msg)
 
-update = on_regex(r"^更新信息$", permission=SUPERUSER, priority=5, block=True)
+update = on_regex(r"^注册$", permission=SUPERUSER, priority=5, block=True)
 
 
 @update.handle()

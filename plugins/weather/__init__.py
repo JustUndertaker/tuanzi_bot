@@ -8,7 +8,7 @@ from .data_source import get_weather_of_city
 from nonebot.plugin import export
 
 export = export()
-export.plugin_name = '天气查询'
+export.plugin_name = '天气'
 export.plugin_usage = '普普通通的查天气吧\n命令：XX天气\n天气 XX'
 
 weather = on_regex(r"([\u4e00-\u9fa5]+[天气]$)|(^天气 [\u4e00-\u9fa5]+$)", permission=GROUP, priority=5, block=True)

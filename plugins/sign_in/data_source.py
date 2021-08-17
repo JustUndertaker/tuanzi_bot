@@ -45,7 +45,7 @@ async def update_info(group_id: int, member_list: list) -> MessageSegment:
             user_name = one['nickname']
         await UserInfo.append_or_update(user_id, group_id, user_name)
     await GroupInfo.append_or_update(group_id)
-    msg = MessageSegment.text('更新完毕。')
+    msg = MessageSegment.text('群注册信息完毕。')
     return msg
 
 
