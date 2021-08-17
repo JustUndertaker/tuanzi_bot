@@ -4,7 +4,7 @@ import httpx
 from httpx import NetworkError
 from nonebot.adapters.cqhttp import MessageSegment
 
-from .tecentAPI import get_authorization
+from .tecent_api import get_authorization
 from configs.config import SECRET_ID, SECRET_KEY
 from utils.log import logger
 
