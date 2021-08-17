@@ -8,8 +8,8 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 from utils.log import logger
 
 from nonebot.adapters.cqhttp.message import MessageSegment
-from modules.user_info import User_Info
-from modules.group_info import Group_Info
+from modules.user_info import UserInfo
+from modules.group_info import GroupInfo
 from utils.user_agent import get_user_agent
 from utils.image import draw_border_text, img_square_to_circle
 from configs.pathConfig import SIGN_IN_IMG_PATH, PATH_FONT
@@ -28,8 +28,8 @@ async def reset() -> list:
     :说明
         重置签到人数，返回所有群号list
     '''
-    await Group_Info.reset_sign()
-    group_list = await Group_Info.get_group_list()
+    await GroupInfo.reset_sign()
+    group_list = await GroupInfo.get_group_list()
     return group_list
 
 
@@ -43,8 +43,8 @@ async def update_info(group_id: int, member_list: list) -> MessageSegment:
         user_name = one['card']
         if user_name == '':
             user_name = one['nickname']
-        await User_Info.append_or_update(user_id, group_id, user_name)
-    await Group_Info.append_or_update(group_id)
+        await UserInfo.append_or_update(user_id, group_id, user_name)
+    await GroupInfo.append_or_update(group_id)
     msg = MessageSegment.text('更新完毕。')
     return msg
 
@@ -63,11 +63,11 @@ async def get_sign_in(user_id: int, group_id: int, user_name: str) -> MessageSeg
         * MessageSegment：机器人返回消息
     '''
     # 更新记录
-    await User_Info.append_or_update(user_id, group_id, user_name)
-    await Group_Info.append_or_update(group_id)
+    await UserInfo.append_or_update(user_id, group_id, user_name)
+    await GroupInfo.append_or_update(group_id)
 
     # 获取上次签到日期
-    last_sign = await User_Info.get_last_sign(user_id, group_id)
+    last_sign = await UserInfo.get_last_sign(user_id, group_id)
     # 判断是否已签到
     today = date.today()
     if today == last_sign:
@@ -75,27 +75,27 @@ async def get_sign_in(user_id: int, group_id: int, user_name: str) -> MessageSeg
         return msg
 
     # 设置签到日期
-    await User_Info.sign_in(user_id, group_id)
+    await UserInfo.sign_in(user_id, group_id)
 
     # 签到名次
-    await Group_Info.sign_in_add(group_id)
-    sign_num = await Group_Info.get_sign_nums(group_id)
+    await GroupInfo.sign_in_add(group_id)
+    sign_num = await GroupInfo.get_sign_nums(group_id)
 
     # 计算运势
     lucky = random.randint(LUCKY_MIN, LUCKY_MAX)
-    await User_Info.change_lucky(user_id, group_id, lucky)
+    await UserInfo.change_lucky(user_id, group_id, lucky)
 
     # 计算金币
     gold = GOLD_BASE+lucky*LUCKY_GOLD
-    await User_Info.change_gold(user_id, group_id, gold)
+    await UserInfo.change_gold(user_id, group_id, gold)
 
     # 好友度
     friendly_add = FRIENDLY_ADD
-    await User_Info.change_friendly(user_id, group_id, friendly_add)
-    friendly = await User_Info.get_friendly(user_id, group_id)
+    await UserInfo.change_friendly(user_id, group_id, friendly_add)
+    friendly = await UserInfo.get_friendly(user_id, group_id)
 
     # 累计签到次数
-    sign_times = await User_Info.get_sign_times(user_id, group_id)
+    sign_times = await UserInfo.get_sign_times(user_id, group_id)
 
     msg = await _draw_card(user_id, user_name, sign_num, lucky, gold, friendly, sign_times)
 

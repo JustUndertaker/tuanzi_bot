@@ -3,13 +3,13 @@ from configs.pathConfig import DATABASE_PATH
 
 
 '''
-group_info表，用于管理整体用户数据
+GroupInfo表，用于管理整体用户数据
 '''
 
 DB = SqliteDatabase(DATABASE_PATH)
 
 
-class Group_Info(Model):
+class GroupInfo(Model):
 
     # 表的结构
     group_id = IntegerField(primary_key=True, verbose_name='QQ群号', null=False)

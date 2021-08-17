@@ -3,13 +3,13 @@ from datetime import date
 from configs.pathConfig import DATABASE_PATH
 
 '''
-user_info表，用于管理整体用户数据
+UserInfo表，用于管理整体用户数据
 '''
 
 DB = SqliteDatabase(DATABASE_PATH)
 
 
-class User_Info(Model):
+class UserInfo(Model):
 
     # 表的结构
     user_id = IntegerField(verbose_name='用户QQ号', null=False)
