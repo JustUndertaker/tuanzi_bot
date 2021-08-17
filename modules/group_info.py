@@ -1,3 +1,4 @@
+from typing import Union
 from peewee import *
 from configs.pathConfig import DATABASE_PATH
 
@@ -132,3 +133,11 @@ class GroupInfo(Model):
         record = cls.get_or_none(cls.group_id == group_id)
         if record is not None:
             record.delete_instance()
+
+    @classmethod
+    async def check_group_init(cls, group_id: int) -> bool:
+        '''
+        检查群是否注册
+        '''
+        record = cls.get_or_none(cls.group_id == group_id)
+        return record is not None
