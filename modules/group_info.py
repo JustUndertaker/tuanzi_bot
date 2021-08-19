@@ -1,15 +1,16 @@
+from typing import Union
 from peewee import *
 from configs.pathConfig import DATABASE_PATH
 
 
 '''
-group_info表，用于管理整体用户数据
+GroupInfo表，用于管理整体用户数据
 '''
 
 DB = SqliteDatabase(DATABASE_PATH)
 
 
-class Group_Info(Model):
+class GroupInfo(Model):
 
     # 表的结构
     group_id = IntegerField(primary_key=True, verbose_name='QQ群号', null=False)
@@ -132,3 +133,11 @@ class Group_Info(Model):
         record = cls.get_or_none(cls.group_id == group_id)
         if record is not None:
             record.delete_instance()
+
+    @classmethod
+    async def check_group_init(cls, group_id: int) -> bool:
+        '''
+        检查群是否注册
+        '''
+        record = cls.get_or_none(cls.group_id == group_id)
+        return record is not None

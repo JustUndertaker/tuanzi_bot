@@ -5,10 +5,11 @@ import re
 from nonebot.typing import T_State
 from utils.log import logger
 from .data_source import get_weather_of_city
+from nonebot.plugin import export
 
-
-__plugin_name__ = '天气查询'
-__plugin_usage__ = "普普通通的查天气吧\n示例：北京天气\n天气 北京"
+export = export()
+export.plugin_name = '天气'
+export.plugin_usage = '普普通通的查天气吧\n命令：XX天气\n天气 XX'
 
 weather = on_regex(r"([\u4e00-\u9fa5]+[天气]$)|(^天气 [\u4e00-\u9fa5]+$)", permission=GROUP, priority=5, block=True)
 
@@ -27,7 +28,10 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     else:
         msg = await get_weather_of_city(city)
 
-    log = f'{event.sender.card}（{event.user_id}，{event.group_id}） - 查询天气：{city}'
+    name = event.sender.card
+    if name == "":
+        name = event.sender.nickname
+    log = f'{name}（{event.user_id}，{event.group_id}） - 查询天气：{city}'
     logger.info(log)
     await weather.finish(msg)
 

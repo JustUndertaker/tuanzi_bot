@@ -3,18 +3,18 @@ from configs.pathConfig import DATABASE_PATH
 
 
 '''
-user_level表，用于管理用户权限等级
+UserLevel表，用于管理用户权限等级
 '''
 
 DB = SqliteDatabase(DATABASE_PATH)
 
 
-class User_Level(Model):
+class UserLevel(Model):
 
     # 表的结构
     user_id = IntegerField(verbose_name='用户QQ号', null=False)
     group_id = IntegerField(verbose_name='QQ群号', null=False)
-    user_level = IntegerField(verbose_name='权限等级', default=0)
+    UserLevel = IntegerField(verbose_name='权限等级', default=0)
 
     class Meta:
         table_name = 'user_level'
@@ -36,7 +36,7 @@ class User_Level(Model):
         '''
         record = cls.get_or_none(cls.user_id == user_id, cls.group_id == group_id)
         if record is not None:
-            return record.user_level
+            return record.UserLevel
         else:
             return None
 
@@ -52,7 +52,7 @@ class User_Level(Model):
             * level：权限等级
         '''
         record, _ = cls.get_or_create(user_id=user_id, group_id=group_id)
-        record.user_level = level
+        record.UserLevel = level
         record.save()
 
     @classmethod

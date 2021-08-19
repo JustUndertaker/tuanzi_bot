@@ -1,4 +1,4 @@
-from nonebot.adapters.cqhttp import Bot, GroupMessageEvent, MessageSegment
+from nonebot.adapters.cqhttp import Bot, GroupMessageEvent
 from nonebot.adapters.cqhttp.permission import GROUP
 from nonebot import on_regex
 from nonebot.permission import SUPERUSER
@@ -7,9 +7,11 @@ from utils.utils import scheduler, get_bot
 
 from .data_source import get_sign_in, reset, update_info
 from utils.log import logger
+from nonebot.plugin import export
 
-__plugin_name__ = '签到系统'
-__plugin_usage__ = "普普通通的签到系统，每天0点重置\n命令：签到"
+export = export()
+export.plugin_name = '签到'
+export.plugin_usage = '普普通通的签到系统，每天0点重置\n命令：签到'
 
 sign = on_regex(r"^签到$", permission=GROUP, priority=5, block=True)
 
@@ -25,7 +27,7 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     msg = await get_sign_in(user_id, group_id, user_name)
     await sign.finish(msg)
 
-update = on_regex(r"^更新信息$", permission=SUPERUSER, priority=5, block=True)
+update = on_regex(r"^注册$", permission=SUPERUSER, priority=5, block=True)
 
 
 @update.handle()
@@ -34,6 +36,8 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     group_id = event.group_id
     member_list = await bot.get_group_member_list(group_id=group_id)
     msg = await update_info(group_id, member_list)
+    log = f'（{event.group_id}）管理员更新信息'
+    logger.info(log)
     await update.finish(msg)
 
 
@@ -41,8 +45,8 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
 @scheduler.scheduled_job("cron", hour=0, minute=0)
 async def _():
     group_list = await reset()
+    bot = get_bot()
     for group_id in group_list:
-        bot = get_bot()
         try:
             await bot.send_group_msg(group_id=group_id, message='又是元气满满的一天呢~')
         except:

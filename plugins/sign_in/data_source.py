@@ -9,7 +9,7 @@ from utils.log import logger
 
 from nonebot.adapters.cqhttp.message import MessageSegment
 from modules.user_info import UserInfo
-from modules.group_info import Group_Info
+from modules.group_info import GroupInfo
 from utils.user_agent import get_user_agent
 from utils.image import draw_border_text, img_square_to_circle
 from configs.pathConfig import SIGN_IN_IMG_PATH, PATH_FONT
@@ -28,8 +28,8 @@ async def reset() -> list:
     :说明
         重置签到人数，返回所有群号list
     '''
-    await Group_Info.reset_sign()
-    group_list = await Group_Info.get_group_list()
+    await GroupInfo.reset_sign()
+    group_list = await GroupInfo.get_group_list()
     return group_list
 
 
@@ -44,8 +44,8 @@ async def update_info(group_id: int, member_list: list) -> MessageSegment:
         if user_name == '':
             user_name = one['nickname']
         await UserInfo.append_or_update(user_id, group_id, user_name)
-    await Group_Info.append_or_update(group_id)
-    msg = MessageSegment.text('更新完毕。')
+    await GroupInfo.append_or_update(group_id)
+    msg = MessageSegment.text('群注册信息完毕。')
     return msg
 
 
@@ -64,7 +64,7 @@ async def get_sign_in(user_id: int, group_id: int, user_name: str) -> MessageSeg
     '''
     # 更新记录
     await UserInfo.append_or_update(user_id, group_id, user_name)
-    await Group_Info.append_or_update(group_id)
+    await GroupInfo.append_or_update(group_id)
 
     # 获取上次签到日期
     last_sign = await UserInfo.get_last_sign(user_id, group_id)
@@ -78,8 +78,8 @@ async def get_sign_in(user_id: int, group_id: int, user_name: str) -> MessageSeg
     await UserInfo.sign_in(user_id, group_id)
 
     # 签到名次
-    await Group_Info.sign_in_add(group_id)
-    sign_num = await Group_Info.get_sign_nums(group_id)
+    await GroupInfo.sign_in_add(group_id)
+    sign_num = await GroupInfo.get_sign_nums(group_id)
 
     # 计算运势
     lucky = random.randint(LUCKY_MIN, LUCKY_MAX)

@@ -13,8 +13,13 @@ from nonebot.adapters import Bot, Event
 
 from .lolicon import fetch_lolicon_random_img
 
+from nonebot.plugin import export
 
-_plugin_name = '色图'
+export = export()
+export.plugin_name = '色图'
+export.plugin_usage = '获得lolicon的涩图\n命令：色图/涩图'
+
+
 _reg_pattern = r'^[色|涩]图$'
 sexy_img = on_regex(_reg_pattern, priority=5, block=True)
 
@@ -39,15 +44,15 @@ async def _(bot: Bot, event: Event, state: T_State):
             text = MessageSegment.text(f'标题: {title}\n画师: {author}\n地址: {url}\n')
             img = MessageSegment.image(url)
             message = text + img
-            logger.info(f'{_plugin_name}插件发送: {message}')
+            logger.info(f'涩图插件发送: {message}')
         except (RequestError, HTTPStatusError) as httpExc:
-            logger.error(f'{_plugin_name}插件访问网络异常: {httpExc}')
+            logger.error(f'涩图插件访问网络异常: {httpExc}')
             message = MessageSegment.text('网络异常')
         except json.JSONDecodeError as jsonExc:
-            logger.error(f'{_plugin_name}插件接口返回数据结构异常: {jsonExc}')
+            logger.error(f'涩图插件接口返回数据结构异常: {jsonExc}')
             message = MessageSegment.text('返回异常')
         except Exception as e:
-            logger.error(f'{_plugin_name}插件异常: {e}')
+            logger.error(f'涩图插件异常: {e}')
             message = MessageSegment.text('其余异常')
         try:
             # 由于图片可能无法访问，因此需要捕捉ActionFailed异常

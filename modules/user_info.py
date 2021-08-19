@@ -3,7 +3,7 @@ from datetime import date
 from configs.pathConfig import DATABASE_PATH
 
 '''
-user_info表，用于管理整体用户数据
+UserInfo表，用于管理整体用户数据
 '''
 
 DB = SqliteDatabase(DATABASE_PATH)

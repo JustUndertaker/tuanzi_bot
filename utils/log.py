@@ -1,30 +1,49 @@
-import logging
-from datetime import datetime
+import sys as _sys
+import atexit as _atexit
+from loguru import _defaults
+from loguru._logger import Core as _Core
+from loguru._logger import Logger as _Logger
 from configs.pathConfig import LOG_PATH
-# CRITICAL    50
-# ERROR      40
-# WARNING   30
-# INFO        20
-# DEBUG      10
-# NOTSET     0
+from nonebot.log import default_filter, default_format
 
-# _handler = logging.StreamHandler(sys.stdout)
-# _handler.setFormatter(
-#     logging.Formatter('[%(asctime)s %(name)s] %(levelname)s: %(message)s')
-# )
-logger = logging.getLogger('tuanzi')
-logger.setLevel(level=logging.DEBUG)
+logger = _Logger(_Core(), None, 0, False, False, False, False, True, None, {})
 
-#formatter = logging.Formatter('[%(asctime)s] - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
-formatter = logging.Formatter('[%(asctime)s] - %(levelname)s: %(message)s')
+_atexit.register(logger.remove)
 
-file_handler = logging.FileHandler(LOG_PATH + str(datetime.now().date()) + '.log', mode='a', encoding='utf-8')
-file_handler.setLevel(level=logging.INFO)
-file_handler.setFormatter(formatter)
+custom_format = "{time:MM-DD HH:MM:SS} [{name}] [{level}] | {message}"
 
-stream_handler = logging.StreamHandler()
-stream_handler.setLevel(logging.INFO)
-stream_handler.setFormatter(formatter)
+if _defaults.LOGURU_AUTOINIT and _sys.stderr:
+    logger.add(_sys.stderr,
+               filter=default_filter,
+               format=default_format,
+               level='INFO')
 
-logger.addHandler(file_handler)
-logger.addHandler(stream_handler)
+logger.add(
+    LOG_PATH+"debug/{time:YYYY-MM-DD}.log",
+    rotation="00:00",
+    retention="10 days",
+    level="DEBUG",
+    format=custom_format,
+    filter=default_filter,
+    encoding="utf-8"
+)
+
+logger.add(
+    LOG_PATH+"info/{time:YYYY-MM-DD}.log",
+    rotation="00:00",
+    retention="10 days",
+    level="INFO",
+    format=custom_format,
+    filter=default_filter,
+    encoding="utf-8"
+)
+
+logger.add(
+    LOG_PATH+"error/{time:YYYY-MM-DD}.log",
+    rotation="00:00",
+    retention="10 days",
+    level="ERROR",
+    format=custom_format,
+    filter=default_filter,
+    encoding="utf-8"
+)
