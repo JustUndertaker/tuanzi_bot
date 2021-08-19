@@ -1,5 +1,5 @@
 import httpx
-import regex
+import re
 from httpx import RequestError, HTTPStatusError
 from nonebot import on_regex
 from nonebot.exception import ActionFailed
@@ -23,7 +23,7 @@ _rosysun_url = 'http://api.rosysun.cn/cos'
 async def _(bot: Bot, event: Event, state: T_State):
     # 只匹配cos纯指令(或coser，前三个字母不分大小写)，后续带任何字符都不作处理
     text = event.get_plaintext()
-    matcher = regex.match(_reg_pattern, text)
+    matcher = re.match(_reg_pattern, text)
     if matcher is not None:
         message = _img_from_rosysun()
         try:
