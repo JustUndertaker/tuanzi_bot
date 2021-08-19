@@ -1,6 +1,12 @@
-from peewee import *
 from datetime import date
 from configs.pathConfig import DATABASE_PATH
+from peewee import (
+    SqliteDatabase,
+    Model,
+    IntegerField,
+    CharField,
+    DateField
+)
 
 '''
 UserInfo表，用于管理整体用户数据

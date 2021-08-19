@@ -1,7 +1,12 @@
 from typing import Union
-from peewee import *
 from configs.pathConfig import DATABASE_PATH
-
+from peewee import (
+    SqliteDatabase,
+    Model,
+    CharField,
+    IntegerField,
+    BooleanField
+)
 
 '''
 plugin_info表，用于管理插件开关
