@@ -32,7 +32,7 @@ async def get_weather_of_city(city: str) -> MessageSegment:
         img = _draw_card_of_weather(data_json['data'])
         msg = MessageSegment.image(img)
         return msg
-    except:
+    except Exception:
         msg = MessageSegment.text("查询失败了，难道是网络有问题！")
         return msg
 

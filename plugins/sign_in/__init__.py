@@ -49,6 +49,6 @@ async def _():
     for group_id in group_list:
         try:
             await bot.send_group_msg(group_id=group_id, message='又是元气满满的一天呢~')
-        except:
+        except Exception:
             log = f'（{group_id}）群被禁言了，无法发送晚安……'
             logger.warning(log)

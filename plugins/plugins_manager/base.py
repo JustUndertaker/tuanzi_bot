@@ -37,6 +37,6 @@ def manager_init() -> None:
             usage = plugin.export['plugin_usage']
             one = PluginBase(module_name, plugin_name, usage)
             PluginManager.append(one)
-        except:
+        except Exception:
             continue
     logger.info('插件管理器注册完成')

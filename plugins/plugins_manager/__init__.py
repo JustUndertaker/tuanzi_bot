@@ -82,13 +82,13 @@ def _get_help_name(message_str: str) -> str:
     '''
     # 匹配前面
     args = re.search(r'[\u4E00-\u9FA5A-Za-z0-9_]+[帮助]$', message_str)
-    if args != None:
+    if args is not None:
         # 获得字符串
         loc = re.search('帮助', args.string).span()[0]
         args = args.string[0:loc]
         # 去除前缀
         head = re.search(r'(查一下)|(问一下)|(问问)|(想知道)|(查查)', args)
-        if head != None:
+        if head is not None:
             loc = head.span()[1]
             args = args[loc:]
         return args
@@ -122,7 +122,7 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     try:
         plugin_name, status = _get_change_params(text)
         msg = await change_plugin_status(plugin_name, group_id, status)
-    except:
+    except Exception:
         msg = MessageSegment.text('参数正确吗？检查一下。')
 
     await change.finish(msg)
@@ -150,6 +150,6 @@ def _get_change_params(text: str) -> tuple[str, bool]:
             status = False
         else:
             raise Exception
-    except:
+    except Exception:
         raise Exception
     return plugin_name, status

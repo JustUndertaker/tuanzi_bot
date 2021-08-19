@@ -149,7 +149,7 @@ async def _draw_card(user_id: int, user_name: str, sign_num: int, lucky: int, go
         size = (167, 167)
         little_head = img_head.resize(size)
         head = img_square_to_circle(little_head, 167, 15, border_color)
-    except:
+    except Exception:
         w, h = img_head.size
         if w > h:
             radius = h
@@ -165,7 +165,6 @@ async def _draw_card(user_id: int, user_name: str, sign_num: int, lucky: int, go
     img.paste(img_card, loc, mask=img_card)
 
     # 语录
-    #font = ImageFont.truetype(PATH_FONT, size=20)
     random_text = random.choice(RANDOM_SAID)
     w, _ = font.getsize(random_text)
     loc = (320-int(w/2), 578)

@@ -31,7 +31,7 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     logger.info(log)
     try:
         msg = await get_chat_reply(text)
-    except:
+    except Exception:
         f'{name}（{event.user_id}，{event.group_id}）：闲聊失败。'
         logger.error(log)
         flag = False
