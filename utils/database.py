@@ -12,7 +12,7 @@ def database_init():
     '''
     初始化建表
     '''
-    logger.info('正在注册数据库')
+    logger.debug('正在注册数据库')
     table_list = [
         UserInfo,
         GroupInfo,
@@ -22,4 +22,4 @@ def database_init():
     DB = SqliteDatabase(DATABASE_PATH)
     DB.connect()
     DB.create_tables(table_list)
-    logger.info('数据库注册完成')
+    logger.debug('数据库注册完成')
