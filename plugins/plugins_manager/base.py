@@ -18,7 +18,7 @@ def manager_init() -> None:
     '''
     插件管理器初始化函数
     '''
-    logger.info('正在注册插件管理器')
+    logger.debug('正在注册插件管理器')
     global PluginManager
     plugins_list = get_loaded_plugins()
 
@@ -39,4 +39,4 @@ def manager_init() -> None:
             PluginManager.append(one)
         except Exception:
             continue
-    logger.info('插件管理器注册完成')
+    logger.debug('插件管理器注册完成')
