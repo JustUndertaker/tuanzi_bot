@@ -1,10 +1,16 @@
+<<<<<<< HEAD
 import httpx
 import re
+=======
+import regex
+>>>>>>> remotes/origin/pye52
 from httpx import RequestError, HTTPStatusError
 from nonebot import on_regex
 from nonebot.exception import ActionFailed
+
+from .moe import img_from_moe
+from .rosysun import img_from_rosysun
 from utils.log import logger
-from nonebot.adapters.cqhttp import MessageSegment
 from nonebot.typing import T_State
 from nonebot.adapters import Bot, Event
 
@@ -16,32 +22,41 @@ export.plugin_usage = '获得好看的小姐姐\n命令：cos/coser'
 
 _reg_pattern = r'^[cC][oO][sS](er)?$'
 coser = on_regex(_reg_pattern, priority=5, block=True)
-_rosysun_url = 'http://api.rosysun.cn/cos'
+_api = [
+    img_from_moe,
+    img_from_rosysun,
+]
 
 
 @coser.handle()
 async def _(bot: Bot, event: Event, state: T_State):
     # 只匹配cos纯指令(或coser，前三个字母不分大小写)，后续带任何字符都不作处理
     text = event.get_plaintext()
+<<<<<<< HEAD
     matcher = re.match(_reg_pattern, text)
     if matcher is not None:
         message = _img_from_rosysun()
+=======
+    matcher = regex.match(_reg_pattern, text)
+    if matcher is None:
+        return
+    message = None
+    for api in _api:
+>>>>>>> remotes/origin/pye52
         try:
-            # 由于图片可能无法访问，因此需要捕捉ActionFailed异常
-            await coser.finish(message)
-        except ActionFailed:
-            await coser.finish('信息发送失败')
-
-
-def _img_from_rosysun() -> MessageSegment:
+            message = api()
+            break
+        except (RequestError, HTTPStatusError) as httpExc:
+            logger.error(f'{export.plugin_name}插件访问网络异常: {httpExc}')
+            continue
+        except Exception as e:
+            logger.error(f'{export.plugin_name}插件异常: {e}')
+            continue
+    if message is None:
+        await coser.finish('无法获取正确图片')
+        return
     try:
-        url = httpx.get(_rosysun_url).text
-        message = MessageSegment.image(url)
-        logger.info(f'COS插件发送: {message}')
-    except (RequestError, HTTPStatusError) as httpExc:
-        logger.error(f'COS插件访问网络异常: {httpExc}')
-        message = MessageSegment.text('网络异常')
-    except Exception as e:
-        logger.error(f'COS插件异常: {e}')
-        message = MessageSegment.text('其余异常')
-    return message
+        # 由于图片可能无法访问，因此需要捕捉ActionFailed异常
+        await coser.finish(message)
+    except ActionFailed:
+        await coser.finish('图片获取失败')
