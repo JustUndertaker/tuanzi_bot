@@ -1,8 +1,8 @@
 import nonebot
-from nonebot import require
+from .APScheduler import APSscheduler
 
 # 全局定时器对象
-scheduler = require('nonebot_plugin_apscheduler').scheduler
+scheduler = APSscheduler
 
 
 def get_bot():
