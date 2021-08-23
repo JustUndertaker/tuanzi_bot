@@ -1,4 +1,5 @@
 from datetime import date
+
 from configs.pathConfig import DATABASE_PATH
 from peewee import (
     SqliteDatabase,
@@ -30,6 +31,30 @@ class UserInfo(Model):
     class Meta:
         table_name = 'user_info'
         database = DB
+
+    def display(self):
+        return f'QQ号: {self.user_id}\n' \
+               f'金币: {self.gold}\n' \
+               f'好感度: {self.friendly}\n' \
+               f'今日运势: {self.lucky}\n' \
+               f'累计签到: {self.sign_times}\n' \
+               f'上次签到: {self.last_sign}'
+
+    @classmethod
+    async def get(cls, user_id: int, group_id: int):
+        '''
+        :说明：
+            获取用户
+
+        :参数
+            * user_id：用户QQ
+            * group_id：QQ群号
+
+        :返回
+            * UserInfo：用户数据记录
+            * None：不存在记录
+        '''
+        return cls.get_or_none(cls.user_id == user_id, cls.group_id == group_id)
 
     @classmethod
     async def get_friendly(cls, user_id: int, group_id: int) -> int:
