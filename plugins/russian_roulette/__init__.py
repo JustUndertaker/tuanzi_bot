@@ -1,4 +1,3 @@
-import export as export
 from nonebot import on_command
 from nonebot.adapters import Bot
 from nonebot.adapters.cqhttp import GROUP, GroupMessageEvent, Message, MessageSegment
