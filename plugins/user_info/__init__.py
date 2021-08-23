@@ -9,15 +9,12 @@ export = export()
 export.plugin_name = '用户信息'
 export.plugin_usage = '查看当前我的信息\n命令：我的'
 
-user = on_regex(r"^我的&", permission=GROUP, priority=5, block=True)
+user = on_regex(r"^我的$", permission=GROUP, priority=5, block=True)
 
 
 @user.handle()
 async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     user_id = event.user_id
     group_id = event.group_id
-    u = await UserInfo.get(user_id, group_id)
-    if u is None:
-        await user.finish('无用户信息')
-        return
-    await user.finish(u.display())
+    text = await UserInfo.user_display(user_id, group_id)
+    await user.finish(text)

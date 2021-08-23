@@ -33,15 +33,18 @@ class UserInfo(Model):
         database = DB
 
     def display(self):
-        return f'QQ号: {self.user_id}\n' \
+        t = f'QQ号: {self.user_id}\n' \
                f'金币: {self.gold}\n' \
                f'好感度: {self.friendly}\n' \
                f'今日运势: {self.lucky}\n' \
-               f'累计签到: {self.sign_times}\n' \
-               f'上次签到: {self.last_sign}'
+               f'累计签到: {self.sign_times}\n' 
+        if self.last_sign is not None:
+            t += f'上次签到: {self.last_sign}'
+        return t
+
 
     @classmethod
-    async def get(cls, user_id: int, group_id: int):
+    async def user_display(cls, user_id: int, group_id: int):
         '''
         :说明：
             获取用户
@@ -54,7 +57,11 @@ class UserInfo(Model):
             * UserInfo：用户数据记录
             * None：不存在记录
         '''
-        return cls.get_or_none(cls.user_id == user_id, cls.group_id == group_id)
+        record = cls.get_or_none(cls.user_id == user_id, cls.group_id == group_id)
+        if record is not None:
+            return record.display()
+        else:
+            return ''
 
     @classmethod
     async def get_friendly(cls, user_id: int, group_id: int) -> int:
