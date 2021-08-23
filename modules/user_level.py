@@ -1,6 +1,9 @@
-from peewee import *
 from configs.pathConfig import DATABASE_PATH
-
+from peewee import (
+    SqliteDatabase,
+    Model,
+    IntegerField
+)
 
 '''
 UserLevel表，用于管理用户权限等级

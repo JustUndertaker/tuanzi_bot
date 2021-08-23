@@ -19,4 +19,8 @@ DATABASE_PATH = './database/data.db'
 YIQING_IMG_PATH = './resources/img/yiqing/backgroud.png'
 
 # 签到背景图片
-SIGN_IN_IMG_PATH = './/resources/img/sign_in/backgroud.png'
+SIGN_IN_IMG_PATH = './resources/img/sign_in/backgroud.png'
+
+# 功能菜单-开关图片
+MEAU_IMG_OPEN = './resources/img/plugins_manager/open.png'
+MEAU_IMG_CLOSE = './resources/img/plugins_manager/close.png'

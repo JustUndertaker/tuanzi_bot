@@ -61,13 +61,13 @@ def _get_name(message_str: str) -> str:
 
     # 匹配前面
     args = re.search(r'[\u4e00-\u9fa5]+[疫情]$', message_str)
-    if args != None:
+    if args is not None:
         # 获得字符串
         loc = re.search('疫情', args.string).span()[0]
         args = args.string[0:loc]
         # 去除前缀
         head = re.search(r'(查一下)|(问一下)|(问问)|(想知道)|(查询)|(查查)', args)
-        if head != None:
+        if head is not None:
             loc = head.span()[1]
             args = args[loc:]
         return args

@@ -45,7 +45,7 @@ async def update_info(group_id: int, member_list: list) -> MessageSegment:
             user_name = one['nickname']
         await UserInfo.append_or_update(user_id, group_id, user_name)
     await GroupInfo.append_or_update(group_id)
-    msg = MessageSegment.text('群注册信息完毕。')
+    msg = MessageSegment.text('群信息更新完毕。')
     return msg
 
 
@@ -97,10 +97,17 @@ async def get_sign_in(user_id: int, group_id: int, user_name: str) -> MessageSeg
     # 累计签到次数
     sign_times = await UserInfo.get_sign_times(user_id, group_id)
 
-    msg = await _draw_card(user_id, user_name, sign_num, lucky, gold, friendly, sign_times)
-
-    log = f'（{user_id,group_id}）触发：签到系统'
-    logger.info(log)
+    # 可能出现访问出错，这时改为文字发送信息
+    try:
+        msg = await _draw_card(user_id, user_name, sign_num, lucky, gold, friendly, sign_times)
+        log = '签到卡片创建成功。'
+        logger.debug(log)
+        msg = MessageSegment.at(user_id)+msg
+    except Exception:
+        log = '签到卡片创建失败。'
+        logger.debug(log)
+        req = f'\n签到成功。今日运势：{lucky}\n获得金币：{gold}\n累计签到次数：{sign_times}'
+        msg = MessageSegment.at(user_id)+MessageSegment.text(req)
     return msg
 
 
@@ -149,7 +156,7 @@ async def _draw_card(user_id: int, user_name: str, sign_num: int, lucky: int, go
         size = (167, 167)
         little_head = img_head.resize(size)
         head = img_square_to_circle(little_head, 167, 15, border_color)
-    except:
+    except Exception:
         w, h = img_head.size
         if w > h:
             radius = h
@@ -165,7 +172,6 @@ async def _draw_card(user_id: int, user_name: str, sign_num: int, lucky: int, go
     img.paste(img_card, loc, mask=img_card)
 
     # 语录
-    #font = ImageFont.truetype(PATH_FONT, size=20)
     random_text = random.choice(RANDOM_SAID)
     w, _ = font.getsize(random_text)
     loc = (320-int(w/2), 578)

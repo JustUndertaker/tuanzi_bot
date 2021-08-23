@@ -33,8 +33,8 @@ async def get_chat_reply(text: str) -> MessageSegment:
             logger.info(log)
             return msg
 
-        except:
-            error = f'闲聊-腾讯接口调用失败了，改用青云客接口。'
+        except Exception:
+            error = '闲聊-腾讯接口调用失败了，改用青云客接口。'
             logger.error(error)
 
     # 调用青云客API
@@ -93,7 +93,7 @@ def _get_chat_from_tencent(text: str) -> str:
         else:
             reply = req['Reply']
             return reply
-    except:
+    except Exception:
         raise NetworkError
 
 
@@ -124,5 +124,5 @@ def _get_chat_from_qingyunke(text: str) -> str:
         msg = str(req['content'])
         msg = msg.replace(r'{br}', '\n')
         return msg
-    except:
+    except Exception:
         raise NetworkError

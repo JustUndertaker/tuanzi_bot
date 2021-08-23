@@ -1,7 +1,7 @@
 import json
 import random
 
-import regex
+import re
 from httpx import RequestError, HTTPStatusError
 from nonebot import on_regex
 from nonebot.exception import ActionFailed
@@ -35,7 +35,7 @@ _random_api = [
 @sexy_img.handle()
 async def _(bot: Bot, event: Event, state: T_State):
     text = event.get_plaintext()
-    matcher = regex.match(_reg_pattern, text)
+    matcher = re.match(_reg_pattern, text)
     # 当前色图插件只支持纯指令(避免和搜/识图插件的指令混淆)
     if matcher is not None:
         try:
