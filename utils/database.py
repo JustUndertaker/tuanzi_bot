@@ -7,6 +7,8 @@ from modules.plugin_info import PluginInfo
 
 from nonebot.log import logger
 
+from modules.duel_history import DuelHistory
+
 
 def database_init():
     '''
@@ -17,7 +19,8 @@ def database_init():
         UserInfo,
         GroupInfo,
         UserLevel,
-        PluginInfo
+        PluginInfo,
+        DuelHistory,
     ]
     DB = SqliteDatabase(DATABASE_PATH)
     DB.connect()

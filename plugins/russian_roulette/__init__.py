@@ -33,13 +33,14 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     group_id = event.group_id
     player1_id = event.sender.user_id
     # 获取最近一场决斗
-    latest_duel = await get_latest_duel(group_id)
+    latest_duel = get_latest_duel(group_id)
     # 若决斗有效
-    if latest_duel is not None and latest_duel.active():
+    if latest_duel is not None and latest_duel.can_be_handle():
         if latest_duel.expired():
             logger.debug(f'终止超时的决斗: {latest_duel}')
             # 超时后终止上一个决斗
-            await duel_end(latest_duel)
+            duel_end(latest_duel)
+            del latest_duel
         # 若决斗未超时，则发送通知并跳过后续步骤
         elif latest_duel.player1_id == player1_id:
             await russian_roulette.finish('请先完成当前决斗')
@@ -57,8 +58,10 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     gold_message = message[0]
     if gold_message.is_text:
         message_text = str(gold_message).strip()
-        if message_text.isdigit():
+        try:
             gold = int(message_text)
+        except Exception:
+            pass
 
     if gold == 0:
         await russian_roulette.finish(f'请按照格式: {export.plugin_usage}')
@@ -98,7 +101,7 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     # 若无指定被决斗者，则所有群员都可响应这场决斗
     if player2_id == -1:
         # 插入新的决斗记录
-        await insert_duel(group_id, player1_id, player2_id, gold)
+        insert_duel(group_id, player1_id, player2_id, gold)
         await russian_roulette.finish(random_sentence(group_challenge))
     # 不能和自己决斗
     if player2_id == player1_id:
@@ -108,7 +111,7 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
         await russian_roulette.finish('敢向裁判挑战? 不怕我毙了你嘛')
     else:
         # 插入新的决斗记录
-        await insert_duel(group_id, player1_id, player2_id, gold)
+        insert_duel(group_id, player1_id, player2_id, gold)
         # 向被决斗者发送at消息
         random_s = random_sentence(challenge)
         message = Message(f'{MessageSegment.at(player2_id)}{random_s}')
@@ -119,16 +122,16 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
 async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     group_id = event.group_id
     # 获取最近一场决斗
-    latest_duel = await get_latest_duel(group_id)
+    latest_duel = get_latest_can_handle_duel(group_id)
     # 决斗可能因超时被取消(或根本无发生过任何决斗)
-    if latest_duel is None or not latest_duel.can_be_accept():
+    if latest_duel is None or not latest_duel.can_be_handle:
         logger.debug(f'当前无可被接受挑战的决斗: {latest_duel}')
         await _accept.finish('当前无任何决斗，你接受个什么劲儿')
         return
     # 若决斗超时则跳过后续步骤(更新其状态)
     if latest_duel.expired():
         logger.debug(f'决斗已超时，不能被接受了: {latest_duel}')
-        await duel_end(latest_duel)
+        duel_end(latest_duel)
         await _accept.finish('决斗已经超时，请重新发起')
         return
     accept_id = event.user_id
@@ -144,13 +147,14 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
             logger.debug(f'接受决斗者无足够金币: {player2_gold}')
             await russian_roulette.finish(f'你的金币不足以支付决斗费用，请去打工再来')
             return
-        logger.debug(f'当前决斗被接受: {player2_id}，进入下一阶段')
         # 进入下一阶段
-        await duel_accept(latest_duel)
+        duel_accept(latest_duel)
+        logger.debug(f'当前决斗被接受，进入下一阶段: {latest_duel}')
         random_s = random_sentence(accept_challenge)
         message = Message(f'{MessageSegment.at(player2_id)}{random_s}{MessageSegment.at(player1_id)}')
         await _accept.send(message)
-        await _accept.finish('请通过[开枪]来把握自己的命运')
+        finish = Message(f'{MessageSegment.at(player1_id)}请通过[开枪]来把握自己的命运')
+        await _accept.finish(finish)
     else:
         await _accept.finish('和你无关，一边玩泥巴去!')
 
@@ -159,16 +163,16 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
 async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     group_id = event.group_id
     # 获取最近一场决斗
-    latest_duel = await get_latest_duel(group_id)
+    latest_duel = get_latest_can_handle_duel(group_id)
     # 决斗可能因超时被取消(或根本无发生过任何决斗)
-    if latest_duel is None or not latest_duel.can_be_accept():
+    if latest_duel is None or not latest_duel.can_be_handle:
         logger.debug(f'当前无可被拒绝挑战的决斗: {latest_duel}')
         await _refuse.finish('当前无任何决斗，你怂个啥哦')
         return
     # 若决斗超时则跳过后续步骤(更新其状态)
     if latest_duel.expired():
         logger.debug(f'决斗已超时，不能被拒绝了: {latest_duel}')
-        await duel_end(latest_duel)
+        duel_end(latest_duel)
         await _accept.finish('决斗已经超时了，挺起腰板吧')
         return
     refuse_id = event.user_id
@@ -181,7 +185,7 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     if player2_id == refuse_id:
         logger.debug('用户{player2_id}拒绝了决斗，更新其状态')
         # 更新决斗状态
-        await duel_denied(latest_duel)
+        duel_denied(latest_duel)
         message = Message(f'卑微的{MessageSegment.at(player2_id)}拒绝了应用的{MessageSegment.at(player1_id)}')
         await _refuse.finish(message)
     else:
@@ -191,10 +195,10 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
 @_shot.handle()
 async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     group_id = event.group_id
-    latest_duel = await get_latest_duel(group_id)
+    latest_duel = get_latest_can_shot_duel(group_id)
     # 当前没有决斗或不在决斗状态，直接向用户发出通知消息
     if latest_duel is None or not latest_duel.in_duel():
-        logger.debug('[开枪]当前无进行中的决斗')
+        logger.debug(f'[开枪]当前无进行中的决斗: {latest_duel}')
         await _shot.finish('射射射，你射个啥呢，现在没有任何决斗!')
         return
 
@@ -203,7 +207,7 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     logger.debug(f'[开枪{shot_player_id}]当前决斗: {latest_duel}')
     # 决斗超时进入结算(由另一方发送开枪才允许触发结算)
     if shot_player_id == another_player_id and latest_duel.expired():
-        await duel_end(latest_duel)
+        duel_end(latest_duel)
         # 进入结算状态
         winner, loser = latest_duel.clearing()
         if winner is None or loser is None:
@@ -220,7 +224,7 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
         await _shot.finish('枪不在你手上，别捣乱')
         return
     # 根据开枪用户当天运气，触发额外事件
-    user_fortune = UserInfo.get_lucky(shot_player_id, group_id)
+    user_fortune = await UserInfo.get_lucky(shot_player_id, group_id)
     if user_fortune is None:
         user_fortune = 0
     # 总概率为用户最大运气值的3%(这里强关联了用户的最大运气值)
@@ -239,32 +243,35 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
         # 是否需要结束决斗
         if end:
             end_message = await _end_of_game(event, latest_duel, winner, loser)
+            duel_end(latest_duel)
             await russian_roulette.send(message)
-            await duel_end(latest_duel)
             await russian_roulette.finish(end_message)
             return
         # 当前子弹是否已发射
         if shot:
-            await duel_shot(latest_duel)
+            duel_shot(latest_duel)
         else:
-            await duel_switch(latest_duel)
+            duel_switch(latest_duel)
         await russian_roulette.finish(message)
         return
-    get_shot = await duel_shot(latest_duel)
+    get_shot = duel_shot(latest_duel)
     if get_shot:
         logger.debug(f'用户{shot_player_id}中弹，进入结算')
+        duel_end(latest_duel)
         # 中枪后进入结算
         message = await _end_of_game(event, latest_duel, another_player_id, shot_player_id)
-        await duel_end(latest_duel)
+        await russian_roulette.finish(message)
+    else:
+        message = Message(f'{MessageSegment.at(shot_player_id)}安然无恙，轮到{MessageSegment.at(another_player_id)}开枪了')
         await russian_roulette.finish(message)
 
 
-async def _end_of_game(event: GroupMessageEvent, duel: DuelHistory, winner: int, loser: int) -> MessageSegment:
+async def _end_of_game(event: GroupMessageEvent, duel: DuelHistory, winner: int, loser: int) -> Message:
     group_id = event.group_id
     wager = duel.wager
     await UserInfo.change_gold(winner, group_id, wager)
     await UserInfo.change_gold(loser, group_id, -wager)
-    return MessageSegment.text(
+    return Message(
         f'胜者{MessageSegment.at(winner)}赢得了{wager}枚金币\n'
         f'败者{MessageSegment.at(loser)}被丢进了海里喂鱼\n'
         f'子弹: {duel.visual_bullet}')
