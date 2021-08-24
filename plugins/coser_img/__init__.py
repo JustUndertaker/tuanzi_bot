@@ -5,6 +5,7 @@ from nonebot.exception import ActionFailed
 
 from .moe import img_from_moe
 from .rosysun import img_from_rosysun
+from .yanghanwen import img_from_yanghanwen
 from utils.log import logger
 from nonebot.typing import T_State
 from nonebot.adapters import Bot, Event
@@ -18,6 +19,7 @@ export.plugin_usage = '获得好看的小姐姐\n命令：cos/coser'
 _reg_pattern = r'^[cC][oO][sS](er)?$'
 coser = on_regex(_reg_pattern, priority=5, block=True)
 _api = [
+    img_from_yanghanwen,
     img_from_moe,
     img_from_rosysun,
 ]
