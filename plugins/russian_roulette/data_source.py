@@ -100,7 +100,7 @@ def insert_duel(
 
 def duel_accept(duel: DuelHistory):
     # 每枪中弹概率
-    p = random.uniform(0, 1)
+    p = random.uniform(0, 0.7)
     # 生成弹闸列表
     bullet_list = ['1' if r > p else '0' for r in [random.uniform(0, 1) for _ in range(0, 7)]]
     # 默认是player1开首枪
