@@ -34,11 +34,10 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     player1_id = event.sender.user_id
     # 获取最近一场决斗
     latest_duel = get_latest_duel(group_id)
-    # 若决斗有效
     if latest_duel is not None and latest_duel.can_be_handle():
+        # 超时后终止上一个决斗
         if latest_duel.expired():
             logger.debug(f'终止超时的决斗: {latest_duel}')
-            # 超时后终止上一个决斗
             duel_end(latest_duel)
             del latest_duel
         # 若决斗未超时，则发送通知并跳过后续步骤
@@ -64,7 +63,7 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
             pass
 
     if gold == 0:
-        await russian_roulette.finish(f'请按照格式: {export.plugin_usage}')
+        await russian_roulette.finish('请输入赌注，子弹也是要钱的')
         return
     elif gold < 0:
         await russian_roulette.finish('咋地，决斗完还想倒吸钱啊?')
@@ -77,6 +76,11 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
             player2_id = int(item.data.get('qq', -1))
             break
 
+    # 不能和自己决斗
+    if player2_id == player1_id:
+        await russian_roulette.finish('珍爱生命，不要自残', at_sender=True)
+        return
+
     # 检测决斗发起人是否有足够的金币
     player1_gold = await UserInfo.get_gold(player1_id, group_id)
     logger.debug(f'开始一场新的决斗:\n'
@@ -84,14 +88,14 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
                  f'挑战者拥有金币: {player1_gold}\n'
                  f'赌注: {gold}')
     if player1_gold < gold:
-        await russian_roulette.finish(f'请出门左转打工挣够钱再来')
+        await russian_roulette.finish('请出门左转打工挣够钱再来')
         return
     # 若指定了被决斗者，则检测其金币是否足够
     if player2_id != -1:
         player2_gold = await UserInfo.get_gold(player2_id, group_id)
         if player2_gold < gold:
             logger.debug(f'被挑战者{player2_id}所拥有金币不足以支付决斗')
-            await russian_roulette.finish(f'你的对手太穷了，他不配和你对战')
+            await russian_roulette.finish('你的对手太穷了，他不配和你对战')
             return
         logger.debug(f'被挑战者: {player2_id}\n'
                      f'被挑战者拥有金币: {player2_gold}')
@@ -103,18 +107,11 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
         # 插入新的决斗记录
         insert_duel(group_id, player1_id, player2_id, gold)
         await russian_roulette.finish(random_sentence(group_challenge))
-    # 不能和自己决斗
-    if player2_id == player1_id:
-        await russian_roulette.finish(f'珍爱生命，不要自残', at_sender=True)
-    # 也不允许向机器人发起决斗
-    elif player2_id == event.self_id:
-        await russian_roulette.finish('敢向裁判挑战? 不怕我毙了你嘛')
     else:
         # 插入新的决斗记录
         insert_duel(group_id, player1_id, player2_id, gold)
         # 向被决斗者发送at消息
-        random_s = random_sentence(challenge)
-        message = Message(f'{MessageSegment.at(player2_id)}{random_s}')
+        message = Message(f'{MessageSegment.at(player2_id)}{random_sentence(challenge)}')
         await russian_roulette.finish(message)
 
 
@@ -124,7 +121,7 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     # 获取最近一场决斗
     latest_duel = get_latest_can_handle_duel(group_id)
     # 决斗可能因超时被取消(或根本无发生过任何决斗)
-    if latest_duel is None or not latest_duel.can_be_handle:
+    if latest_duel is None:
         logger.debug(f'当前无可被接受挑战的决斗: {latest_duel}')
         await _accept.finish('当前无任何决斗，你接受个什么劲儿')
         return
@@ -137,10 +134,10 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     accept_id = event.user_id
     player1_id = latest_duel.player1_id
     if player1_id == accept_id:
-        await _accept.finish(f'珍爱生命，不要自残', at_sender=True)
+        await _accept.finish('珍爱生命，不要自残', at_sender=True)
         return
     player2_id = latest_duel.player2_id
-    logger.debug(f'[接受]当前决斗: {latest_duel}')
+    logger.debug('[接受]当前决斗: {latest_duel}')
     # 用户是否有资格接受决斗(当前决斗未指定任何人，或接受用户是被决斗者)
     if player2_id == -1 or player2_id == accept_id:
         player2_id = accept_id
@@ -148,7 +145,7 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
         player2_gold = await UserInfo.get_gold(player2_id, group_id)
         if player2_gold < latest_duel.wager:
             logger.debug(f'接受决斗者无足够金币: {player2_gold}')
-            await _accept.finish(f'你的金币不足以支付决斗费用，请去打工再来')
+            await _accept.finish('你的金币不足以支付决斗费用，请去打工再来')
             return
         # 进入下一阶段
         duel_accept(latest_duel)
@@ -168,7 +165,7 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     # 获取最近一场决斗
     latest_duel = get_latest_can_handle_duel(group_id)
     # 决斗可能因超时被取消(或根本无发生过任何决斗)
-    if latest_duel is None or not latest_duel.can_be_handle:
+    if latest_duel is None:
         logger.debug(f'当前无可被拒绝挑战的决斗: {latest_duel}')
         await _refuse.finish('当前无任何决斗，你怂个啥哦')
         return
@@ -180,13 +177,16 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
         return
     refuse_id = event.user_id
     player1_id = latest_duel.player1_id
+    if player1_id == refuse_id:
+        await _accept.finish('你不能拒绝自己的决斗', at_sender=True)
+        return
     player2_id = latest_duel.player2_id
     logger.debug(f'[拒绝]当前决斗: {latest_duel}')
     if player2_id == -1:
         await _refuse.finish('这场决斗面向所有人，不用站出来认怂')
         return
     if player2_id == refuse_id:
-        logger.debug('用户{player2_id}拒绝了决斗，更新其状态')
+        logger.debug(f'用户{player2_id}拒绝了决斗，更新其状态')
         # 更新决斗状态
         duel_denied(latest_duel)
         message = Message(f'卑微的{MessageSegment.at(player2_id)}拒绝了应用的{MessageSegment.at(player1_id)}')
@@ -200,7 +200,7 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     group_id = event.group_id
     latest_duel = get_latest_can_shot_duel(group_id)
     # 当前没有决斗或不在决斗状态，直接向用户发出通知消息
-    if latest_duel is None or not latest_duel.in_duel():
+    if latest_duel is None:
         logger.debug(f'[开枪]当前无进行中的决斗: {latest_duel}')
         await _shot.finish('射射射，你射个啥呢，现在没有任何决斗!')
         return

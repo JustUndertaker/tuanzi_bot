@@ -1,6 +1,5 @@
 import datetime
 import random
-import time
 from typing import Union
 from modules.duel_history import DuelHistory
 
