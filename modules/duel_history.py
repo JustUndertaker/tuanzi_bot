@@ -1,5 +1,4 @@
 import datetime
-import time
 
 from peewee import Model, IntegerField, CharField, DateTimeField, SqliteDatabase
 
@@ -83,7 +82,7 @@ class DuelHistory(Model):
         return self.order < 8
 
     def expired(self) -> bool:
-        current_time = time.time()
+        current_time = datetime.datetime.now()
         if self.state == 0:
             return (current_time - self.start_time.timestamp()) > _TIMEOUT
         elif self.state == 1:
