@@ -7,7 +7,7 @@
 LUCKY_MIN = 1
 
 # 每日运势最大值
-LUCKY_MAX = 5
+LUCKY_MAX = 100
 
 # 每次签到获得的好感度
 FRIENDLY_ADD = 1
@@ -16,7 +16,7 @@ FRIENDLY_ADD = 1
 GOLD_BASE = 10
 
 # 幸运值影响金币因子
-LUCKY_GOLD = 10
+LUCKY_GOLD = 1
 
 # 签到随机语录
 RANDOM_SAID = [
