@@ -4,7 +4,7 @@
 import nonebot
 from nonebot.adapters.cqhttp import Bot as CQHTTPBot
 from utils.database import database_init
-from utils.APScheduler import start_scheduler
+from utils.ap_scheduler import start_scheduler
 
 nonebot.init()
 app = nonebot.get_asgi()
