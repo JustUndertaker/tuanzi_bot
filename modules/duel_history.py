@@ -82,7 +82,7 @@ class DuelHistory(Model):
         return self.order < 8
 
     def expired(self) -> bool:
-        current_time = datetime.datetime.now()
+        current_time = datetime.datetime.now().timestamp()
         if self.state == 0:
             return (current_time - self.start_time.timestamp()) > _TIMEOUT
         elif self.state == 1:
