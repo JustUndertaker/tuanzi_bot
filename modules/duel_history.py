@@ -31,7 +31,7 @@ class DuelHistory(Model):
     order = IntegerField(verbose_name='子弹', default=0)
     probability = IntegerField(verbose_name='中枪概率', default=0)
     last_shot_time = DateTimeField(verbose_name='上次开枪时间', default=0)
-    start_time = DateTimeField(verbose_name='累计签到次数', default=datetime.datetime.now())
+    start_time = DateTimeField(verbose_name='累计签到次数')
     end_time = DateTimeField(verbose_name='上次签到日期', null=True)
 
     class Meta:

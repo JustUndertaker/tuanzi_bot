@@ -94,6 +94,7 @@ def insert_duel(
         in_turn=player1,
         wager=wager,
         state=0,
+        start_time=datetime.datetime.now(),
     )
 
 
