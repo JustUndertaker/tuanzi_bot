@@ -100,17 +100,22 @@ def insert_duel(
 
 def duel_accept(duel: DuelHistory):
     bullet_list = []
-    # 总体中弹概率
-    p = random.uniform(0, 1)
-    p /= 7
+    # 随机子弹数
+    c = random.randint(0, 6)
+    # 计算每个弹闸的子弹出现几率
+    p = c / 7
     # 生成弹闸列表
     for index in range(0, 7):
         r = random.uniform(0, 1)
-        bullet_list.append('1' if r < p else '0')
+        if r < p and c != 0:
+            bullet_list.append('1')
+            c -= 1
+        else:
+            bullet_list.append('0')
     # 默认是player1开首枪
     duel.in_turn = duel.player1_id
     duel.bullet = ','.join(bullet_list)
-    duel.probability = p
+    duel.probability = p * 100
     duel.state = 1
     duel.last_shot_time = datetime.datetime.now()
     duel.save()

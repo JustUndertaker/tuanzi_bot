@@ -79,7 +79,7 @@ class DuelHistory(Model):
         return None, None
 
     def can_be_shot(self):
-        return self.order < 8
+        return self.order < 7
 
     def expired(self) -> bool:
         current_time = datetime.datetime.now().timestamp()

@@ -151,7 +151,7 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
         duel_accept(latest_duel)
         logger.debug(f'当前决斗被接受，进入下一阶段: {latest_duel}')
         random_s = random_sentence(accept)
-        message = Message(f'{MessageSegment.at(player2_id)}{random_s}{MessageSegment.at(player1_id)}'
+        message = Message(f'{MessageSegment.at(player2_id)}{random_s}{MessageSegment.at(player1_id)}。'
                           f'{MessageSegment.at(player1_id)}请通过[开枪]来把握自己的命运')
         await _accept.finish(message)
     else:
@@ -234,8 +234,8 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     user_fortune = await UserInfo.get_lucky(shot_player_id, group_id)
     if user_fortune is None:
         user_fortune = 0
-    # 总概率为用户最大运气值的3%(这里强关联了用户的最大运气值)
-    real_fortune = (LUCKY_MAX - user_fortune) * 3
+    # 总概率为用户最大运气值的7%(这里强关联了用户的最大运气值)
+    real_fortune = (LUCKY_MAX - user_fortune) * 7
     r = random.uniform(0, 1) * real_fortune
     t = random.randint(0, LUCKY_MAX * 100)
     if t < r:
@@ -270,7 +270,8 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
         message = await _end_of_game(event, latest_duel, another_player_id, shot_player_id)
         await _shot.finish(message)
     else:
-        await _shot.finish(random_sentence(miss))
+        message = Message(f'{random_sentence(miss)}。枪交到了{MessageSegment.at(another_player_id)}手上')
+        await _shot.finish(message)
 
 
 async def _end_of_game(event: GroupMessageEvent, duel: DuelHistory, winner: int, loser: int) -> Message:
