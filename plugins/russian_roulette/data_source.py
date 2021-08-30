@@ -101,12 +101,12 @@ def insert_duel(
 def duel_accept(duel: DuelHistory):
     bullet_list = []
     # 总体中弹概率
-    p = random.uniform(0, 0.9)
+    p = random.uniform(0, 1)
+    p /= 7
     # 生成弹闸列表
     for index in range(0, 7):
         r = random.uniform(0, 1)
-        bullet_list.append('1' if r > p else '0')
-        p = max(0, p - r)
+        bullet_list.append('1' if r < p else '0')
     # 默认是player1开首枪
     duel.in_turn = duel.player1_id
     duel.bullet = ','.join(bullet_list)
