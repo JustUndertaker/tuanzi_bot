@@ -151,10 +151,9 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
         duel_accept(latest_duel)
         logger.debug(f'当前决斗被接受，进入下一阶段: {latest_duel}')
         random_s = random_sentence(accept)
-        message = Message(f'{MessageSegment.at(player2_id)}{random_s}{MessageSegment.at(player1_id)}')
-        await _accept.send(message)
-        finish = Message(f'{MessageSegment.at(player1_id)}请通过[开枪]来把握自己的命运')
-        await _accept.finish(finish)
+        message = Message(f'{MessageSegment.at(player2_id)}{random_s}{MessageSegment.at(player1_id)}'
+                          f'{MessageSegment.at(player1_id)}请通过[开枪]来把握自己的命运')
+        await _accept.finish(message)
     else:
         await _accept.finish('和你无关，一边玩泥巴去!')
 

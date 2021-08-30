@@ -98,10 +98,14 @@ def insert_duel(
 
 
 def duel_accept(duel: DuelHistory):
-    # 每枪中弹概率
-    p = random.uniform(0, 0.7)
+    bullet_list = []
+    # 总体中弹概率
+    p = random.uniform(0, 0.9)
     # 生成弹闸列表
-    bullet_list = ['1' if r > p else '0' for r in [random.uniform(0, 1) for _ in range(0, 7)]]
+    for index in range(0, 7):
+        r = random.uniform(0, 1)
+        bullet_list.append('1' if r > p else '0')
+        p = max(0, p - r)
     # 默认是player1开首枪
     duel.in_turn = duel.player1_id
     duel.bullet = ','.join(bullet_list)
