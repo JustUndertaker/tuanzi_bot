@@ -1,5 +1,5 @@
 from nonebot.plugin import get_loaded_plugins
-from nonebot.log import logger
+from utils.log import logger
 import os
 
 

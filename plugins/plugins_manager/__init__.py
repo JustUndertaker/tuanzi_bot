@@ -58,7 +58,7 @@ async def _(matcher: Matcher, bot: Bot, event: GroupMessageEvent, state: T_State
 
     # 判断是否跳过本插件
     if module_name == self_module:
-        if is_init or (state['_matched'] == '注册'):
+        if is_init or (state['_matched'] == '更新'):
             return
 
     # 鉴权函数
@@ -160,10 +160,10 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
         logger.info(log)
         msg = await change_plugin_status(plugin_name, group_id, status)
         log = f'插件[{plugin_name}]状态设置成功。'
-        logger.debug(log)
+        logger.info(log)
     except Exception:
         log = f'插件[{plugin_name}]状态设置失败。'
-        logger.debug(log)
+        logger.info(log)
         msg = MessageSegment.text('参数正确吗？检查一下。')
 
     await change.finish(msg)
@@ -198,7 +198,7 @@ def _get_change_params(text: str) -> tuple[str, bool]:
 
 # ===============插件菜单===============
 meauregex = r'(^菜单$)|(^功能$)'
-meau = on_regex(meauregex, permission=SUPERUSER, priority=2, block=False)
+meau = on_regex(meauregex, permission=GROUP, priority=2, block=False)
 
 
 @meau.handle()
