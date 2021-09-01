@@ -48,7 +48,12 @@ async def _(matcher: Matcher, bot: Bot, event: GroupMessageEvent, state: T_State
     '''
     插件管理预处理函数，只处理群消息
     '''
-    # 获取群号
+    # 跳过不是群消息的事件
+    event_type = event.get_event_name()
+    if event_type != "message.group.normal":
+        return
+
+    # 获取群号id
     group_id = event.group_id
     # 获取插件模块名
     module_name = matcher.plugin_name
