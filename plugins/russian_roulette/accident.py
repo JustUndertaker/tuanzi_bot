@@ -4,11 +4,11 @@ from nonebot.adapters.cqhttp import MessageSegment
 
 
 def bullet_jammed(shot_player_id, another_player_id):
-    return MessageSegment.text('你很幸运，子弹卡壳了'), False, False, None, None
+    return MessageSegment.text('你很幸运，扳机卡住了'), False, False, None, None
 
 
 def bullet_missed(shot_player_id, another_player_id):
-    return MessageSegment.text('子弹擦过了你的脑壳，你活了下来'), True, False, None, None
+    return MessageSegment.text('尽管扣下了扳机，但没有任何反应'), True, False, None, None
 
 
 _random_accident = [

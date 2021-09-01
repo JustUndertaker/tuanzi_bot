@@ -78,9 +78,6 @@ class DuelHistory(Model):
             temp_shot_id = self.player1_id if temp_shot_id == self.player1_id else self.player2_id
         return None, None
 
-    def can_be_shot(self):
-        return self.order < 7
-
     def expired(self) -> bool:
         current_time = datetime.datetime.now().timestamp()
         if self.state == 0:

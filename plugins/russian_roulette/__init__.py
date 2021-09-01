@@ -123,7 +123,7 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     # 决斗可能因超时被取消(或根本无发生过任何决斗)
     if latest_duel is None:
         logger.debug(f'当前无可被接受挑战的决斗: {latest_duel}')
-        await _accept.finish('当前无任何决斗，你接受个什么劲儿')
+        await _accept.finish('当前无任何可接受的决斗，你接受个什么劲儿')
         return
     # 若决斗超时则跳过后续步骤(更新其状态)
     if latest_duel.expired():
@@ -166,7 +166,7 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     # 决斗可能因超时被取消(或根本无发生过任何决斗)
     if latest_duel is None:
         logger.debug(f'当前无可被拒绝挑战的决斗: {latest_duel}')
-        await _refuse.finish('当前无任何决斗，你怂个啥哦')
+        await _refuse.finish('当前无任何可拒绝的决斗，你怂个啥哦')
         return
     # 若决斗超时则跳过后续步骤(更新其状态)
     if latest_duel.expired():
@@ -203,25 +203,16 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
         logger.debug(f'[开枪]当前无进行中的决斗: {latest_duel}')
         await _shot.finish('射射射，你射个啥呢，现在没有任何决斗!')
         return
-    # 子弹已经打完了但没人死亡，结算
-    if not latest_duel.can_be_shot():
-        duel_end(latest_duel)
-        await _shot.finish('竟然忘记装子弹了，这一次无人获胜!')
-        return
 
     shot_player_id = event.user_id
     another_player_id = latest_duel.another
     logger.debug(f'[开枪{shot_player_id}]当前决斗: {latest_duel}')
-    # 决斗超时进入结算(由另一方发送开枪才允许触发结算)
+    # 决斗超时进入结算(由另一方发送[开枪]才允许触发结算)
     if shot_player_id == another_player_id and latest_duel.expired():
         duel_end(latest_duel)
         # 进入结算状态
         winner, loser = latest_duel.clearing()
-        if winner is None or loser is None:
-            # 无人获胜
-            message = MessageSegment.text('竟然忘记装子弹了，这一次无人获胜!')
-        else:
-            message = await _end_of_game(event, latest_duel, winner, loser)
+        message = await _end_of_game(event, latest_duel, winner, loser)
         logger.debug(f'决斗超时，由另一方发起结算: {another_player_id}')
         await _shot.finish(message)
         return
@@ -234,11 +225,9 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
     user_fortune = await UserInfo.get_lucky(shot_player_id, group_id)
     if user_fortune is None:
         user_fortune = 0
-    # 总概率为用户最大运气值的7%(这里强关联了用户的最大运气值)
-    real_fortune = (LUCKY_MAX - user_fortune) * 7
-    r = random.uniform(0, 1) * real_fortune
-    t = random.randint(0, LUCKY_MAX * 100)
-    if t < r:
+    # 总概率为用户最大运气值的8%(这里强关联了用户的最大运气值)
+    t = random.randint(0, LUCKY_MAX * 8)
+    if t < user_fortune:
         # 触发意外事件，当前子弹直接换人
         message, shot, end, winner, loser = random_accident(shot_player_id, another_player_id)
         logger.debug(f'用户触发意外事件:\n'
@@ -251,7 +240,7 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
         if end:
             end_message = await _end_of_game(event, latest_duel, winner, loser)
             duel_end(latest_duel)
-            await _shot.send(message)
+            await _shot.send('幸运事件: ' + message)
             await _shot.finish(end_message)
             return
         # 当前子弹是否已发射
@@ -259,7 +248,7 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
             duel_shot(latest_duel)
         else:
             duel_switch(latest_duel)
-        await _shot.finish(message)
+        await _shot.finish('幸运事件: ' + message)
         return
     get_shot = duel_shot(latest_duel)
     if get_shot:
