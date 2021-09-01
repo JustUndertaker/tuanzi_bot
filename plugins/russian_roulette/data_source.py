@@ -101,13 +101,25 @@ def insert_duel(
 def duel_accept(duel: DuelHistory):
     bullet_list = []
     # 随机子弹数
-    c = random.randint(0, 6)
-    # 计算每个弹闸的子弹出现几率
-    p = c / 7
+    c_r = random.uniform(0, 1)
+    if c_r < 0.35:
+        c = 1
+    elif 0.35 <= c_r < 0.55:
+        c = 2
+    elif 0.55 <= c_r < 0.75:
+        c = 3
+    elif 0.75 <= c_r < 0.9:
+        c = 4
+    else:
+        c = 5
+    # 理论每个弹孔的子弹出现几率
+    p = c / 6
     # 生成弹闸列表
-    for index in range(0, 7):
+    for index in range(0, 6):
+        # 每装一个弹孔都要修正其几率
+        pt = c / (6 - index)
         r = random.uniform(0, 1)
-        if r < p and c != 0:
+        if r < pt and c != 0:
             bullet_list.append('1')
             c -= 1
         else:
