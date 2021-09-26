@@ -3,6 +3,7 @@ from httpx import RequestError, HTTPStatusError
 from nonebot import on_regex
 from nonebot.exception import ActionFailed
 
+from .zyg0 import img_from_zyg0
 from .moe import img_from_moe
 from .rosysun import img_from_rosysun
 from .yanghanwen import img_from_yanghanwen
@@ -19,6 +20,7 @@ export.plugin_usage = '获得好看的小姐姐\n命令：cos/coser'
 _reg_pattern = r'^[cC][oO][sS](er)?$'
 coser = on_regex(_reg_pattern, priority=5, block=True)
 _api = [
+    img_from_zyg0,
     img_from_yanghanwen,
     img_from_moe,
     img_from_rosysun,
