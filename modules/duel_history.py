@@ -4,7 +4,7 @@ from peewee import Model, IntegerField, CharField, DateTimeField, SqliteDatabase
 
 from configs.pathConfig import DATABASE_PATH
 
-_TIMEOUT = 60
+_TIMEOUT = 60 * 3
 
 
 class DuelHistory(Model):
@@ -58,6 +58,10 @@ class DuelHistory(Model):
         order = self.order
         bullet_str = str(self.bullet).split(',')
         return bullet_str[order] == '1'
+
+    @property
+    def finish(self) -> bool:
+        return self.order >= 6
 
     @property
     def visual_bullet(self) -> str:

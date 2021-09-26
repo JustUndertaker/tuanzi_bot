@@ -250,6 +250,12 @@ async def _(bot: Bot, event: GroupMessageEvent, state: T_State):
             duel_switch(latest_duel)
         await _shot.finish('幸运事件: ' + message)
         return
+    if latest_duel.finish:
+        message = MessageSegment.text('子弹打光了，这场决斗无人胜利~\n'
+                                      f'子弹: {latest_duel.visual_bullet}')
+        await _shot.finish(message)
+        return
+
     get_shot = duel_shot(latest_duel)
     if get_shot:
         logger.debug(f'用户{shot_player_id}中弹，进入结算')
