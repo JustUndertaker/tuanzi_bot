@@ -104,11 +104,11 @@ def duel_accept(duel: DuelHistory):
     c_r = random.uniform(0, 1)
     if c_r < 0.35:
         c = 1
-    elif 0.35 <= c_r < 0.55:
+    elif 0.35 <= c_r < 0.7:
         c = 2
-    elif 0.55 <= c_r < 0.75:
+    elif 0.7 <= c_r < 0.85:
         c = 3
-    elif 0.75 <= c_r < 0.9:
+    elif 0.85 <= c_r < 0.95:
         c = 4
     else:
         c = 5
